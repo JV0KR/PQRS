@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Detalle Radicado</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:0;
+}
+header{
+    background:#1f4e79;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+.container{
+    width:90%;
+    max-width:700px;
+    margin:30px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+input, select, textarea{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+button{
+    background:#1f4e79;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+button:hover{
+    background:#163b5c;
+}
+.card{
+    border:1px solid #ddd;
+    padding:15px;
+    margin:10px 0;
+    border-radius:8px;
+}
+.estado{
+    font-weight:bold;
+}
+.nav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+<header><h1>Detalle del Radicado</h1></header>
+
+<div class="container">
+
+<p><strong>Número:</strong> 2026-001</p>
+<p><strong>Fecha:</strong> 19/05/2026</p>
+<p><strong>Tipo:</strong> Petición</p>
+<p><strong>Estado:</strong> En proceso</p>
+
+<h3>Comentarios</h3>
+<p>Necesito información sobre mi pedido.</p>
+
+<h3>Justificación</h3>
+<p>El caso está siendo revisado por soporte.</p>
+
+<button onclick="alert('Descargando PDF...')">Descargar PDF</button>
+
+</div>
+</body>
+</html>
