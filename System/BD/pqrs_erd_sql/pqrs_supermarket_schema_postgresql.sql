@@ -1,7 +1,7 @@
 -- Esquema PostgreSQL para Sistema PQRS SuperMarket
--- Ejecutar este script después de crear y seleccionar la base de datos pqrs_supermarket.
+-- Ejecutar este script despuÃ©s de crear y seleccionar la base de datos pqrs_supermarket.
 -- Ejecutar una sola vez para crear la base de datos
-CREATE DATABASE pqrs_supermarket;
+-- CREATE DATABASE pqrs_supermarket;
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
@@ -157,7 +157,7 @@ CREATE INDEX idx_pqrs_tipo ON pqrs (id_tipo_radicado);
 CREATE INDEX idx_historial_pqrs ON pqrs_historial_estado (id_pqrs);
 CREATE INDEX idx_historial_fecha ON pqrs_historial_estado (fecha_cambio);
 
--- Datos base mínimos
+-- Datos base mÃ­nimos
 INSERT INTO perfil (nombre, descripcion) VALUES
 ('CLIENTE', 'Usuario que radica y consulta sus PQRS'),
 ('GESTOR', 'Usuario encargado de gestionar PQRS'),
@@ -171,7 +171,10 @@ INSERT INTO tipo_identificacion (nombre, abreviatura) VALUES
 ('NIT', 'NIT');
 
 INSERT INTO tipo_radicado (nombre, descripcion) VALUES
-('PQRS', 'Peticiones, Quejas, Reclamos o Sugerencias');
+('Petición', 'Solicitud formal de información o servicio'),
+('Queja', 'Inconformidad con el trato o servicio recibido'),
+('Reclamo', 'Inconformidad relacionada con los productos o servicios'),
+('Sugerencia', 'Recomendación para mejorar el servicio');
 
 INSERT INTO estado_pqrs (nombre, orden, activo) VALUES
 ('Nuevo', 1, TRUE),
@@ -196,7 +199,7 @@ INSERT INTO opcion (nombre, ruta, icono) VALUES
 ('Cambiar Estado PQRS', '/gestor/estado', 'refresh-cw'),
 ('Administrar Usuarios', '/admin/usuarios', 'users');
 
--- Asignación básica de permisos a perfiles
+-- AsignaciÃ³n bÃ¡sica de permisos a perfiles
 INSERT INTO perfil_permiso (id_perfil, id_permiso)
 SELECT p.id_perfil, pe.id_permiso
 FROM perfil p
@@ -206,7 +209,7 @@ JOIN permiso pe ON (
     (p.nombre = 'ADMIN' AND pe.nombre IN ('CREAR', 'CONSULTAR', 'EDITAR', 'ELIMINAR', 'DESCARGAR', 'REPORTAR'))
 );
 
--- Asignación básica de opciones a perfiles
+-- AsignaciÃ³n bÃ¡sica de opciones a perfiles
 INSERT INTO perfil_opcion (id_perfil, id_opcion)
 SELECT p.id_perfil, o.id_opcion
 FROM perfil p
@@ -216,6 +219,6 @@ JOIN opcion o ON (
     (p.nombre = 'ADMIN' AND o.nombre IN ('Administrar Usuarios', 'Consultar Radicados', 'Generar Reporte PDF'))
 );
 
--- Base para contraseña cifrada:
--- En la aplicación se debe guardar password_hash con bcrypt/argon2, no texto plano.
+-- Base para contraseÃ±a cifrada:
+-- En la aplicaciÃ³n se debe guardar password_hash con bcrypt/argon2, no texto plano.
 

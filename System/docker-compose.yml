@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pqrs_db
+    environment:
+      POSTGRES_DB: pqrs_supermarket
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./BD/pqrs_erd_sql/pqrs_supermarket_schema_postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: "./backend/Spring Boot/pqrs/pqrs"
+      dockerfile: Dockerfile
+    container_name: pqrs_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/pqrs_supermarket
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: pqrs_frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./front:/usr/share/nginx/html
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

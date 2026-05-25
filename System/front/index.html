@@ -3,206 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema PQRS</title>
-
+    <title>Radicar PQRS - SuperMarket</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, Helvetica, sans-serif;
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
-
-        body{
-            background:#f4f6f9;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
+        .form-section:last-child {
+            border-bottom: none;
         }
-
-        .container{
-            width:420px;
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 16px;
         }
-
-        .title{
-            text-align:center;
-            margin-bottom:25px;
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
-
-        .title h1{
-            color:#2c3e50;
-            font-size:28px;
+        @media (max-width: 640px) {
+            .two-cols { grid-template-columns: 1fr; gap: 0; }
         }
-
-        .title p{
-            color:gray;
-            margin-top:5px;
-        }
-
-        .form-group{
-            margin-bottom:20px;
-        }
-
-        label{
-            display:block;
-            margin-bottom:8px;
-            color:#34495e;
-            font-weight:bold;
-        }
-
-        textarea{
-            width:100%;
-            height:140px;
-            border:1px solid #dcdde1;
-            border-radius:10px;
-            padding:15px;
-            resize:none;
-            font-size:15px;
-            outline:none;
-            transition:0.3s;
-        }
-
-        textarea:focus{
-            border-color:#3498db;
-        }
-
-        button{
-            width:100%;
-            padding:14px;
-            border:none;
-            border-radius:10px;
-            background:#3498db;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
-            transition:0.3s;
-        }
-
-        button:hover{
-            background:#2980b9;
-        }
-
-        .mensaje{
-            margin-top:20px;
-            padding:12px;
-            border-radius:8px;
-            text-align:center;
-            display:none;
-        }
-
-        .success{
-            background:#d4edda;
-            color:#155724;
-        }
-
-        .error{
-            background:#f8d7da;
-            color:#721c24;
-        }
-
     </style>
-
 </head>
 <body>
 
-    <div class="container">
-
-        <div class="title">
-            <h1>PQRS</h1>
-            <p>Registro de Peticiones, Quejas y Reclamos</p>
-        </div>
-
-        <form id="pqrsForm">
-
-            <div class="form-group">
-                <label>Comentarios</label>
-
-                <textarea 
-                    id="comentarios"
-                    placeholder="Escriba aquí su solicitud..."
-                    required>
-                </textarea>
-            </div>
-
-            <button type="submit">
-                Registrar PQRS
-            </button>
-
-        </form>
-
-        <div id="mensaje" class="mensaje"></div>
-
+    <!-- Animated Background -->
+    <div class="bg-animated">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <script>
+    <div class="app-container">
+        <!-- ======================= -->
+        <!--    VIEW: RADICAR PUBLIC -->
+        <!-- ======================= -->
+        <div id="view-radicar" class="view active">
+            <nav class="navbar">
+                <div class="navbar-brand">SuperMarket PQRS</div>
+                <div class="navbar-info">
+                    <span style="color: var(--text-secondary); font-size: 14px;">Portal de Atencion al Ciudadano</span>
+                </div>
+            </nav>
 
-        const form = document.getElementById("pqrsForm");
+            <div class="content" style="max-width: 700px;">
+                <div class="page-header" style="text-align: center;">
+                    <h2 style="font-size: 28px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Radicar Nueva Solicitud</h2>
+                    <p style="font-size: 15px;">Complete el siguiente formulario con sus datos personales y los detalles de su solicitud. Su cuenta sera creada automaticamente.</p>
+                </div>
 
-        form.addEventListener("submit", async (e) => {
+                <div class="form-card" id="radicar-form-container" style="max-width: 100%;">
+                    <form id="radicar-form">
+                        
+                        <!-- DATOS PERSONALES -->
+                        <div class="form-section">
+                            <div class="form-section-title">1. Datos Personales</div>
+                            
+                            <div class="two-cols">
+                                <div class="form-group">
+                                    <label>Tipo de Identificacion</label>
+                                    <select id="tipo-id" class="form-control" required>
+                                        <option value="">Cargando...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Numero de Identificacion</label>
+                                    <input type="text" id="numero-id" class="form-control" placeholder="Ej: 10203040" required>
+                                </div>
+                            </div>
 
-            e.preventDefault();
+                            <div class="form-group">
+                                <label>Nombres Completos</label>
+                                <input type="text" id="nombres" class="form-control" placeholder="Juan Perez" required>
+                            </div>
+                            
+                            <div class="two-cols">
+                                <div class="form-group">
+                                    <label>Correo Electronico</label>
+                                    <input type="email" id="correo" class="form-control" placeholder="juan@correo.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefono Movil (Opcional)</label>
+                                    <input type="tel" id="telefono" class="form-control" placeholder="3001234567">
+                                </div>
+                            </div>
+                        </div>
 
-            const comentarios = document
-                .getElementById("comentarios")
-                .value;
+                        <!-- DATOS DE LA SOLICITUD -->
+                        <div class="form-section">
+                            <div class="form-section-title">2. Detalles de la Solicitud</div>
+                            
+                            <div class="form-group">
+                                <label>Tipo de Solicitud</label>
+                                <select id="tipo-radicado" class="form-control" required>
+                                    <option value="">Cargando...</option>
+                                </select>
+                            </div>
 
-            const mensaje = document.getElementById("mensaje");
+                            <div class="form-group">
+                                <label>Comentarios / Descripcion</label>
+                                <textarea id="comentarios" class="form-control" placeholder="Describa detalladamente su peticion, queja, reclamo o sugerencia..." required></textarea>
+                            </div>
+                        </div>
 
-            try {
+                        <button type="submit" class="btn btn-primary" style="padding: 16px; font-size: 16px; width: 100%;">Enviar Radicado</button>
+                    </form>
+                    <div id="radicar-message" class="message"></div>
+                </div>
 
-                const response = await fetch(
-                    "http://localhost:8080/api/pqrs",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            comentarios: comentarios
-                        })
-                    }
-                );
+                <!-- RESULTADO EXITO -->
+                <div class="form-card" id="radicar-result" style="display: none; max-width: 100%; text-align: center;">
+                    <div class="success-icon" style="color: #34d399; font-size: 64px;">&#10004;</div>
+                    <h3 style="font-size: 24px; margin-bottom: 12px;">Solicitud Radicada con Exito</h3>
+                    
+                    <div class="radicado-number" id="result-numero" style="font-size: 28px; font-weight: bold; color: var(--primary-light); margin: 20px 0; padding: 20px; background: rgba(99, 102, 241, 0.1); border: 2px dashed var(--primary); border-radius: 12px;">
+                        PQRS-XXXX
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
+                        <h4 style="color: #34d399; margin-bottom: 8px;">Cuenta Creada Automaticamente</h4>
+                        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
+                            Se ha generado un usuario para que pueda consultar el estado de esta y futuras solicitudes:
+                            <br><br>
+                            <strong>Usuario:</strong> <span id="result-correo" style="color: var(--text);"></span><br>
+                            <strong>Contrasena:</strong> Su numero de identificacion
+                        </p>
+                    </div>
 
-                if(response.ok){
+                    <button class="btn btn-primary" onclick="resetForm()" style="max-width: 300px;">Radicar Otra Solicitud</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    const data = await response.json();
-
-                    mensaje.style.display = "block";
-                    mensaje.className = "mensaje success";
-
-                    mensaje.innerHTML = `
-                        PQRS registrada correctamente <br><br>
-                        <strong>Radicado:</strong> ${data.numeroRadicado}
-                    `;
-
-                    form.reset();
-
-                }else{
-
-                    mensaje.style.display = "block";
-                    mensaje.className = "mensaje error";
-                    mensaje.innerHTML = "Error al registrar la PQRS";
-
-                }
-
-            } catch(error){
-
-                mensaje.style.display = "block";
-                mensaje.className = "mensaje error";
-                mensaje.innerHTML = "No se pudo conectar con el servidor";
-
-                console.log(error);
-            }
-
-        });
-
-    </script>
-
+    <script src="app.js"></script>
 </body>
 </html>
