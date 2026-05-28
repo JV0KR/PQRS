@@ -1,81 +1,92 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Login Gestor</title>
+<title>Acceso Gestor – PQRS</title>
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:0;
-}
-header{
-    background:#1f4e79;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
-.container{
-    width:90%;
-    max-width:700px;
-    margin:30px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-input, select, textarea{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-button{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-button:hover{
-    background:#163b5c;
-}
-.card{
-    border:1px solid #ddd;
-    padding:15px;
-    margin:10px 0;
-    border-radius:8px;
-}
-.estado{
-    font-weight:bold;
-}
-.nav{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
+*{box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:0;}
+header{background:#1f4e79;color:white;padding:15px;text-align:center;}
+header p{margin:4px 0 0;font-size:13px;opacity:0.8;}
+.container{width:90%;max-width:440px;margin:30px auto;background:white;padding:24px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.back{margin-bottom:16px;} .back a{color:#1f4e79;font-size:13px;text-decoration:none;}
+.back a:hover{text-decoration:underline;}
+label{display:block;margin-top:12px;font-weight:bold;font-size:14px;color:#333;}
+input{width:100%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px;font-size:14px;}
+button{background:#1f4e79;color:white;border:none;padding:11px;border-radius:5px;cursor:pointer;font-size:14px;width:100%;margin-top:16px;}
+button:hover{background:#163b5c;}
+button:disabled{background:#aaa;cursor:not-allowed;}
+.alert{padding:11px;border-radius:5px;margin:12px 0;font-size:13px;}
+.alert.error{background:#f8d7da;color:#842029;border:1px solid #f5c2c7;}
+.alert.warning{background:#fff3cd;color:#664d03;border:1px solid #ffecb5;}
+.info-box{background:#cff4fc;border:1px solid #b6effb;color:#055160;border-radius:6px;padding:10px 14px;font-size:13px;margin-top:16px;}
+.hint{font-size:12px;color:#888;margin:2px 0 4px;}
 </style>
 </head>
 <body>
-<header><h1>Panel Gestor PQRS</h1></header>
-
+<header>
+  <h1>Acceso Gestor PQRS</h1>
+  <p>Aplicación Web – Panel de administración</p>
+</header>
 <div class="container">
+  <div class="back"><a href="index.html">← Volver al inicio</a></div>
 
-<label>Usuario</label>
-<input type="text">
+  <div class="alert error" id="err" style="display:none"></div>
+  <div class="alert warning" id="warn-bloqueo" style="display:none"></div>
 
-<label>Contraseña</label>
-<input type="password">
+  <label>Usuario</label>
+  <p class="hint">Nombre de usuario o correo (máx. 100 caracteres)</p>
+  <input type="text" id="user" placeholder="usuario o correo@supermarket.com" maxlength="100" oninput="verificar()">
 
-<a href="dashboard.html">
-<button>Ingresar</button>
-</a>
+  <label>Contraseña</label>
+  <p class="hint">Mínimo 8 caracteres</p>
+  <input type="password" id="pwd" placeholder="Contraseña asignada por el administrador" maxlength="30" oninput="verificar()">
 
+  <button id="btn-ingresar" onclick="ingresar()" disabled>Ingresar al panel</button>
+
+  <div class="info-box">🔒 Acceso restringido al personal autorizado de SuperMarket con perfil <strong>Gestor PQRS</strong>.</div>
 </div>
+
+<script>
+let intentos=0;
+const MAX=5;
+let bloqueadoHasta=null;
+
+function verificar(){
+  const u=document.getElementById('user').value.trim();
+  const p=document.getElementById('pwd').value;
+  // RF-004: contraseña mínimo 8 caracteres
+  document.getElementById('btn-ingresar').disabled=!(u&&p.length>=8);
+}
+
+function ingresar(){
+  if(bloqueadoHasta&&new Date()<bloqueadoHasta){
+    const m=Math.ceil((bloqueadoHasta-new Date())/60000);
+    document.getElementById('warn-bloqueo').textContent='Cuenta bloqueada temporalmente. Intente en '+m+' minuto(s).';
+    document.getElementById('warn-bloqueo').style.display='block';
+    return;
+  }
+  const u=document.getElementById('user').value.trim();
+  const p=document.getElementById('pwd').value;
+
+  // Demo: gestor01 / gestor2026
+  if((u==='gestor01'||u==='gestor@supermarket.com')&&p==='gestor2026'){
+    intentos=0;
+    window.location='dashboard.html';
+  } else {
+    intentos++;
+    const rest=MAX-intentos;
+    if(intentos>=MAX){
+      bloqueadoHasta=new Date(Date.now()+15*60000);
+      document.getElementById('err').style.display='none';
+      document.getElementById('warn-bloqueo').textContent='Cuenta bloqueada temporalmente. Intente en 15 minutos.';
+      document.getElementById('warn-bloqueo').style.display='block';
+    } else {
+      document.getElementById('err').textContent='Usuario o contraseña incorrectos. Intentos restantes: '+rest+'.';
+      document.getElementById('err').style.display='block';
+    }
+  }
+}
+</script>
 </body>
 </html>

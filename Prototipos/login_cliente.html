@@ -1,79 +1,138 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Login Cliente</title>
+<title>Login Cliente – PQRS</title>
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:0;
-}
-header{
-    background:#1f4e79;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
-.container{
-    width:90%;
-    max-width:700px;
-    margin:30px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-input, select, textarea{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-button{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-button:hover{
-    background:#163b5c;
-}
-.card{
-    border:1px solid #ddd;
-    padding:15px;
-    margin:10px 0;
-    border-radius:8px;
-}
-.estado{
-    font-weight:bold;
-}
-.nav{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
+*{box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:0;}
+header{background:#1f4e79;color:white;padding:15px;text-align:center;}
+header p{margin:4px 0 0;font-size:13px;opacity:0.8;}
+.container{width:90%;max-width:460px;margin:30px auto;background:white;padding:24px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.back{margin-bottom:16px;} .back a{color:#1f4e79;font-size:13px;text-decoration:none;}
+.back a:hover{text-decoration:underline;}
+label{display:block;margin-top:12px;font-weight:bold;font-size:14px;color:#333;}
+input{width:100%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px;font-size:14px;}
+input.error{border-color:#dc3545;}
+button{background:#1f4e79;color:white;border:none;padding:11px;border-radius:5px;cursor:pointer;font-size:14px;width:100%;margin-top:16px;}
+button:hover{background:#163b5c;}
+button:disabled{background:#aaa;cursor:not-allowed;}
+.alert{padding:11px;border-radius:5px;margin:12px 0;font-size:13px;}
+.alert.error{background:#f8d7da;color:#842029;border:1px solid #f5c2c7;}
+.alert.warning{background:#fff3cd;color:#664d03;border:1px solid #ffecb5;}
+.alert.info{background:#cff4fc;color:#055160;border:1px solid #b6effb;}
+.forgot{text-align:right;margin-top:6px;}
+.forgot a{color:#1f4e79;font-size:13px;text-decoration:none;}
+.forgot a:hover{text-decoration:underline;}
+.divider{text-align:center;margin:18px 0;color:#aaa;font-size:13px;border-top:1px solid #eee;padding-top:14px;}
+.register-link{text-align:center;font-size:13px;color:#555;}
+.register-link a{color:#1f4e79;font-weight:bold;text-decoration:none;}
+.register-link a:hover{text-decoration:underline;}
+/* Recuperar contraseña */
+#panel-recuperar{display:none;}
 </style>
 </head>
 <body>
-<header><h1>Login Cliente</h1></header>
-
+<header>
+  <h1>Iniciar Sesión – Cliente</h1>
+  <p>App Móvil PQRS SuperMarket</p>
+</header>
 <div class="container">
-<label>Número de identificación</label>
-<input type="text" placeholder="Ingrese documento">
+  <div class="back"><a href="index.html">← Volver al inicio</a></div>
 
-<label>Contraseña</label>
-<input type="password" placeholder="Ingrese contraseña">
+  <!-- Panel login -->
+  <div id="panel-login">
+    <div class="alert error" id="err-login" style="display:none"></div>
+    <div class="alert warning" id="warn-bloqueo" style="display:none"></div>
 
-<a href="mis_radicados.html">
-<button>Ingresar</button>
-</a>
+    <label>Número de identificación</label>
+    <input type="text" id="doc" placeholder="Solo dígitos" maxlength="15" oninput="this.value=this.value.replace(/\D/,''); verificarCampos()">
+
+    <label>Contraseña <span style="font-weight:normal;font-size:12px;color:#888">(mín. 6 caracteres)</span></label>
+    <input type="password" id="pwd" placeholder="Contraseña recibida por correo" maxlength="20" oninput="verificarCampos()">
+
+    <div class="forgot"><a href="#" onclick="mostrarRecuperar()">¿Olvidé mi contraseña?</a></div>
+
+    <button id="btn-ingresar" onclick="ingresar()" disabled>Iniciar sesión</button>
+
+    <div class="divider">¿Aún no tienes cuenta?</div>
+    <div class="register-link">
+      Radica tu primera PQRS para recibir tu contraseña: <a href="radicar_pqrs.html">Nueva PQRS →</a>
+    </div>
+  </div>
+
+  <!-- Panel recuperar contraseña (A1 de RF-002) -->
+  <div id="panel-recuperar">
+    <h3 style="margin-top:0;color:#1f4e79">Recuperar contraseña</h3>
+    <p style="font-size:14px;color:#555">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña (válido 15 minutos).</p>
+    <div class="alert info" id="ok-recuperar" style="display:none">✔ Enlace enviado. Revisa tu correo en los próximos minutos.</div>
+    <label>Correo electrónico</label>
+    <input type="email" id="email-recuperar" placeholder="usuario@dominio.com">
+    <button onclick="enviarRecuperar()" style="margin-top:12px">Enviar enlace</button>
+    <br><br>
+    <a href="#" style="color:#1f4e79;font-size:13px" onclick="mostrarLogin()">← Volver al inicio de sesión</a>
+  </div>
 </div>
+
+<script>
+let intentosFallidos=0;
+const MAX_INTENTOS=5;
+const BLOQUEO_MIN=15;
+let bloqueadoHasta=null;
+
+function verificarCampos(){
+  const doc=document.getElementById('doc').value.trim();
+  const pwd=document.getElementById('pwd').value;
+  document.getElementById('btn-ingresar').disabled=!(doc&&pwd.length>=6);
+}
+
+function ingresar(){
+  // Verificar bloqueo
+  if(bloqueadoHasta&&new Date()<bloqueadoHasta){
+    const mins=Math.ceil((bloqueadoHasta-new Date())/60000);
+    document.getElementById('warn-bloqueo').textContent=
+      'Cuenta bloqueada temporalmente. Intente en '+mins+' minuto(s).';
+    document.getElementById('warn-bloqueo').style.display='block';
+    return;
+  }
+  const doc=document.getElementById('doc').value.trim();
+  const pwd=document.getElementById('pwd').value;
+
+  // Simular validación: credenciales de demo = 1020304050 / abc123
+  if(doc==='1020304050'&&pwd==='abc123'){
+    intentosFallidos=0;
+    window.location='mis_radicados.html';
+  } else {
+    intentosFallidos++;
+    const restantes=MAX_INTENTOS-intentosFallidos;
+    if(intentosFallidos>=MAX_INTENTOS){
+      bloqueadoHasta=new Date(Date.now()+BLOQUEO_MIN*60000);
+      document.getElementById('err-login').style.display='none';
+      document.getElementById('warn-bloqueo').textContent=
+        'Cuenta bloqueada temporalmente. Intente en '+BLOQUEO_MIN+' minutos.';
+      document.getElementById('warn-bloqueo').style.display='block';
+    } else {
+      document.getElementById('err-login').textContent=
+        'Número de identificación o contraseña incorrectos. Intentos restantes: '+restantes+'.';
+      document.getElementById('err-login').style.display='block';
+    }
+  }
+}
+
+function mostrarRecuperar(){
+  document.getElementById('panel-login').style.display='none';
+  document.getElementById('panel-recuperar').style.display='block';
+}
+function mostrarLogin(){
+  document.getElementById('panel-login').style.display='block';
+  document.getElementById('panel-recuperar').style.display='none';
+}
+function enviarRecuperar(){
+  const email=document.getElementById('email-recuperar').value.trim();
+  if(!email){alert('Ingresa tu correo electrónico.');return;}
+  document.getElementById('ok-recuperar').style.display='block';
+  setTimeout(()=>mostrarLogin(),2500);
+}
+</script>
 </body>
 </html>

@@ -1,90 +1,94 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>Dashboard – Gestor PQRS</title>
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:0;
-}
-header{
-    background:#1f4e79;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
-.container{
-    width:90%;
-    max-width:700px;
-    margin:30px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-input, select, textarea{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-button{
-    background:#1f4e79;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-button:hover{
-    background:#163b5c;
-}
-.card{
-    border:1px solid #ddd;
-    padding:15px;
-    margin:10px 0;
-    border-radius:8px;
-}
-.estado{
-    font-weight:bold;
-}
-.nav{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
+*{box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:0;}
+header{background:#1f4e79;color:white;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;}
+header h1{margin:0;font-size:20px;}
+header span{font-size:13px;opacity:0.85;}
+.nav-bar{background:#163b5c;display:flex;gap:4px;padding:8px 20px;}
+.nav-bar a{color:rgba(255,255,255,0.8);text-decoration:none;padding:7px 14px;border-radius:4px;font-size:13px;}
+.nav-bar a:hover,.nav-bar a.active{background:rgba(255,255,255,0.15);color:white;}
+.container{width:90%;max-width:800px;margin:30px auto;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:28px;}
+.kpi{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-top:4px solid #1f4e79;text-align:center;}
+.kpi.nuevo{border-color:#0d6efd;}
+.kpi.proceso{border-color:#fd7e14;}
+.kpi.resuelto{border-color:#198754;}
+.kpi.rechazado{border-color:#dc3545;}
+.kpi .num{font-size:36px;font-weight:bold;color:#1f4e79;line-height:1;}
+.kpi.nuevo .num{color:#0d6efd;}
+.kpi.proceso .num{color:#fd7e14;}
+.kpi.resuelto .num{color:#198754;}
+.kpi.rechazado .num{color:#dc3545;}
+.kpi .lbl{font-size:13px;color:#666;margin-top:6px;}
+.section{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;}
+.section h3{margin:0 0 16px;color:#1f4e79;font-size:16px;border-bottom:1px solid #eee;padding-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#f0f4f8;color:#444;padding:9px 10px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;}
+td{padding:9px 10px;border-bottom:1px solid #f0f0f0;color:#333;}
+tr:hover td{background:#f8f9fa;}
+.badge{display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:bold;}
+.badge.nuevo{background:#cfe2ff;color:#084298;}
+.badge.proceso{background:#fff3cd;color:#664d03;}
+.badge.resuelto{background:#d1e7dd;color:#0f5132;}
+.badge.rechazado{background:#f8d7da;color:#842029;}
+button{background:#1f4e79;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;}
+button:hover{background:#163b5c;}
+.sprint-info{background:#f0f8ff;border:1px solid #b6d4fe;border-radius:8px;padding:14px;font-size:13px;color:#333;}
+.sprint-info strong{color:#1f4e79;}
 </style>
 </head>
 <body>
-<header><h1>Dashboard Administrador</h1></header>
+<header>
+  <h1>Dashboard – Gestor PQRS</h1>
+  <span>👤 gestor01 &nbsp;|&nbsp; <a href="login_gestor.html" style="color:white">Cerrar sesión</a></span>
+</header>
+<div class="nav-bar">
+  <a href="dashboard.html" class="active">Dashboard</a>
+  <a href="gestion_radicados.html">Gestión Radicados</a>
+  <a href="reportes.html">Reportes</a>
+</div>
 
 <div class="container">
 
-<div class="nav">
-<a href="gestion_radicados.html"><button>Gestión Radicados</button></a>
-<a href="reportes.html"><button>Reportes</button></a>
-</div>
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi nuevo"><div class="num">10</div><div class="lbl">Nuevas PQRS</div></div>
+    <div class="kpi proceso"><div class="num">5</div><div class="lbl">En proceso</div></div>
+    <div class="kpi resuelto"><div class="num">18</div><div class="lbl">Resueltas</div></div>
+    <div class="kpi rechazado"><div class="num">3</div><div class="lbl">Rechazadas</div></div>
+  </div>
 
-<div class="card">
-<h3>Nuevas PQRS</h3>
-<p>10</p>
-</div>
+  <!-- Últimas PQRS -->
+  <div class="section">
+    <h3>Últimas PQRS radicadas</h3>
+    <table>
+      <thead>
+        <tr><th>Radicado</th><th>Tipo</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PQRS-2026-006</td><td>Petición</td><td>27/05/2026</td><td><span class="badge nuevo">Nuevo</span></td><td><a href="gestion_radicados.html"><button>Gestionar</button></a></td></tr>
+        <tr><td>PQRS-2026-005</td><td>Queja</td><td>26/05/2026</td><td><span class="badge nuevo">Nuevo</span></td><td><a href="gestion_radicados.html"><button>Gestionar</button></a></td></tr>
+        <tr><td>PQRS-2026-004</td><td>Reclamo</td><td>25/05/2026</td><td><span class="badge proceso">En proceso</span></td><td><a href="gestion_radicados.html"><button>Gestionar</button></a></td></tr>
+        <tr><td>PQRS-2026-003</td><td>Sugerencia</td><td>22/05/2026</td><td><span class="badge resuelto">Resuelto</span></td><td><a href="gestion_radicados.html"><button>Ver</button></a></td></tr>
+      </tbody>
+    </table>
+  </div>
 
-<div class="card">
-<h3>En proceso</h3>
-<p>5</p>
-</div>
-
-<div class="card">
-<h3>Resueltas</h3>
-<p>18</p>
-</div>
+  <!-- Info sprints -->
+  <div class="section">
+    <h3>Estado del proyecto – Planning</h3>
+    <div class="sprint-info">
+      <strong>Sprint 1:</strong> Autenticarse Cliente, Autenticarse Gestor, Descargar Anexo (inicio) &nbsp;|&nbsp;
+      <strong>Sprint 2:</strong> Consultar Radicados Cliente, Consultar Radicados Gestión, Cambiar Estado PQRS (inicio) &nbsp;|&nbsp;
+      <strong>Sprint 3:</strong> Cambiar Estado PQRS (cierre), Generar Reporte PDF (inicio) &nbsp;|&nbsp;
+      <strong>Sprint 4:</strong> Generar Reporte PDF (cierre), Radicar PQRS
+    </div>
+  </div>
 
 </div>
 </body>
