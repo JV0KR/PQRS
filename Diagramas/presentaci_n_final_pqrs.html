@@ -204,7 +204,7 @@
         </div>
     </section>
 
-    <!-- NUEVO: SECCIÓN DE FLUJO DEL SISTEMA -->
+    <!-- 3. FLUJO DEL SISTEMA -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-diagram-project highlight-purple"></i> Flujo del Sistema PQRS</h2>
@@ -222,7 +222,53 @@
         </div>
     </section>
 
-    <!-- 3. MÓDULO CLIENTE (SEPARADO) -->
+    <!-- NUEVO: 4. CASOS DE USO Y ESPECIFICACIONES -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-users-gear highlight-blue"></i> Casos de Uso y Especificaciones</h2>
+            <p style="margin-bottom: 30px;">Modelado de los actores principales y las acciones fundamentales que desencadenan el comportamiento del sistema.</p>
+            
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <!-- AQUÍ VA TU IMAGEN DE CASOS DE USO -->
+                    <div class="diagram-container" style="border-color: #58a6ff; margin-bottom: 0;">
+                        <img src="diagram_caso_de_us.png" alt="Diagrama de Casos de Uso" class="diagram-img">
+                    </div>
+                </div>
+                
+                <div class="card" style="border-color: #3fb950;">
+                    <h3 class="highlight-green"><i class="fa-solid fa-list-check"></i> Especificaciones Centrales</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Las reglas de negocio están rigurosamente documentadas en nuestras plantillas de especificación:</p>
+                    
+                    <ul style="font-size: 0.95rem;">
+                        <li style="margin-bottom: 15px;">
+                            <i class="fa-solid fa-user highlight-blue" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Actor Cliente:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Interactúa principalmente radicando nuevas PQRS (generación de código y subida de PDF), validando su identidad (Auto-registro) y consultando su propio historial de manera aislada.</span>
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <i class="fa-solid fa-user-tie highlight-orange" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Actor Gestor:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Audita el sistema. Encargado de filtrar las peticiones, descargar los anexos y cambiar el estado (Nuevo → En Proceso → Resuelto) <strong>con justificación obligatoria.</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-word highlight-purple" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Flujos y Excepciones:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Nuestras especificaciones de CU contemplan precondiciones, postcondiciones y caminos alternos, evitando cuellos de botella durante el desarrollo de los Sprints.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. MÓDULO CLIENTE -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-mobile-screen highlight-blue"></i> Funcionalidades: Módulo Cliente</h2>
@@ -256,7 +302,7 @@
         </div>
     </section>
 
-    <!-- 4. MÓDULO GESTOR (SEPARADO) -->
+    <!-- 6. MÓDULO GESTOR -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-user-tie highlight-orange"></i> Funcionalidades: Módulo Gestor</h2>
@@ -290,7 +336,7 @@
         </div>
     </section>
 
-    <!-- NUEVO: PROTOTIPO INTERACTIVO (Mención) -->
+    <!-- 7. PROTOTIPO INTERACTIVO (Mención) -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-desktop highlight-blue"></i> Prototipo Interactivo</h2>
@@ -314,7 +360,7 @@
         </div>
     </section>
 
-    <!-- 5. ARQUITECTURA SEPARADA -->
+    <!-- 8. ARQUITECTURA -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-network-wired highlight-blue"></i> Arquitectura del Sistema</h2>
@@ -341,7 +387,7 @@
         </div>
     </section>
 
-    <!-- 6. BASE DE DATOS SEPARADA -->
+    <!-- 9. BASE DE DATOS -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-database highlight-green"></i> Modelo de Base de Datos</h2>
@@ -367,22 +413,16 @@
                     </div>
                 </div>
                 <div>
-                     <!-- Reemplaza "Diagrama_Relacional.png" (o pdf si usas un visor) con tu archivo. 
-                          Si tienes solo el PDF, lo ideal es convertirlo a PNG/JPG para la web, 
-                          o usar un <iframe> o <object> -->
                     <div class="diagram-container">
                         <!-- Ejemplo si lo conviertes a imagen (recomendado para web) -->
                         <img src="Diagrama_Relacional.png" alt="Diagrama Entidad-Relación" class="diagram-img">
-                        
-                        <!-- Si necesitas cargar el PDF directamente, comenta el <img> arriba y descomenta abajo: -->
-                        <!-- <embed src="Diagrama_Relacional.pdf" width="100%" height="400px" type="application/pdf"> -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. TECNOLOGÍAS -->
+    <!-- 10. TECNOLOGÍAS -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-layer-group highlight-purple"></i> Stack Tecnológico</h2>
@@ -418,7 +458,7 @@
         </div>
     </section>
 
-    <!-- 8. VENTAJA COMPETITIVA -->
+    <!-- 11. VENTAJA COMPETITIVA -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-rocket highlight-green"></i> Ventaja Competitiva</h2>
@@ -438,7 +478,7 @@
         </div>
     </section>
 
-    <!-- 9. METODOLOGÍA Y QA -->
+    <!-- 12. METODOLOGÍA Y QA -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-vial-circle-check highlight-blue"></i> Calidad (QA) y Metodología</h2>
@@ -466,7 +506,7 @@
         </div>
     </section>
 
-    <!-- 10. CONCLUSIONES -->
+    <!-- 13. CONCLUSIONES -->
     <section class="slide">
         <div class="container" style="text-align: center; max-width: 800px;">
             <i class="fa-regular fa-handshake highlight-green" style="font-size: 5rem; margin-bottom: 30px;"></i>
