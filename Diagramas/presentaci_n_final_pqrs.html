@@ -204,70 +204,6 @@
         </div>
     </section>
 
-    <!-- 3. FLUJO DEL SISTEMA -->
-    <section class="slide">
-        <div class="container">
-            <h2><i class="fa-solid fa-diagram-project highlight-purple"></i> Flujo del Sistema PQRS</h2>
-            <p style="margin-bottom: 20px;">Una vista general del recorrido de la información desde que el usuario radica hasta su resolución.</p>
-            
-            <div class="diagram-container" style="border-color: #bc8cff;">
-                <!-- AQUÍ VA TU IMAGEN DEL FLUJO -->
-                <!-- Asegúrate de colocar la imagen en la misma carpeta o poner la ruta correcta -->
-                <img src="Diagrama_Flujo_PQRS.png" alt="Flujo del Sistema PQRS" class="diagram-img">
-            </div>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <p style="font-size: 0.9rem; font-style: italic;">El flujo garantiza una separación clara de responsabilidades entre el Cliente y el Gestor.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- NUEVO: 4. CASOS DE USO Y ESPECIFICACIONES -->
-    <section class="slide">
-        <div class="container">
-            <h2><i class="fa-solid fa-users-gear highlight-blue"></i> Casos de Uso y Especificaciones</h2>
-            <p style="margin-bottom: 30px;">Modelado de los actores principales y las acciones fundamentales que desencadenan el comportamiento del sistema.</p>
-            
-            <div class="grid-2" style="align-items: center;">
-                <div>
-                    <!-- AQUÍ VA TU IMAGEN DE CASOS DE USO -->
-                    <div class="diagram-container" style="border-color: #58a6ff; margin-bottom: 0;">
-                        <img src="diagram_caso_de_us.png" alt="Diagrama de Casos de Uso" class="diagram-img">
-                    </div>
-                </div>
-                
-                <div class="card" style="border-color: #3fb950;">
-                    <h3 class="highlight-green"><i class="fa-solid fa-list-check"></i> Especificaciones Centrales</h3>
-                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Las reglas de negocio están rigurosamente documentadas en nuestras plantillas de especificación:</p>
-                    
-                    <ul style="font-size: 0.95rem;">
-                        <li style="margin-bottom: 15px;">
-                            <i class="fa-solid fa-user highlight-blue" style="font-size: 1.2rem;"></i> 
-                            <div>
-                                <strong style="color: #fff;">Actor Cliente:</strong> 
-                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Interactúa principalmente radicando nuevas PQRS (generación de código y subida de PDF), validando su identidad (Auto-registro) y consultando su propio historial de manera aislada.</span>
-                            </div>
-                        </li>
-                        <li style="margin-bottom: 15px;">
-                            <i class="fa-solid fa-user-tie highlight-orange" style="font-size: 1.2rem;"></i> 
-                            <div>
-                                <strong style="color: #fff;">Actor Gestor:</strong> 
-                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Audita el sistema. Encargado de filtrar las peticiones, descargar los anexos y cambiar el estado (Nuevo → En Proceso → Resuelto) <strong>con justificación obligatoria.</strong></span>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-file-word highlight-purple" style="font-size: 1.2rem;"></i> 
-                            <div>
-                                <strong style="color: #fff;">Flujos y Excepciones:</strong> 
-                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Nuestras especificaciones de CU contemplan precondiciones, postcondiciones y caminos alternos, evitando cuellos de botella durante el desarrollo de los Sprints.</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- 5. MÓDULO CLIENTE -->
     <section class="slide">
         <div class="container">
@@ -336,29 +272,73 @@
         </div>
     </section>
 
-    <!-- 7. PROTOTIPO INTERACTIVO (Mención) -->
+    <!-- 3. FLUJO DEL SISTEMA -->
     <section class="slide">
         <div class="container">
-            <h2><i class="fa-solid fa-desktop highlight-blue"></i> Prototipo Interactivo</h2>
+            <h2><i class="fa-solid fa-diagram-project highlight-purple"></i> Flujo del Sistema PQRS</h2>
+            <p style="margin-bottom: 20px;">Una vista general del recorrido de la información desde que el usuario radica hasta su resolución.</p>
             
-            <div class="card" style="border-color: #58a6ff; text-align: center; padding: 50px;">
-                <i class="fa-solid fa-laptop-code" style="font-size: 5rem; color: #58a6ff; margin-bottom: 20px;"></i>
-                <h3 style="justify-content: center; font-size: 2rem; margin-bottom: 20px;">Demostración del Sistema en Vivo</h3>
-                <p style="font-size: 1.2rem; color: #c9d1d9; max-width: 800px; margin: 0 auto;">
-                    Para visualizar de manera tangible la experiencia de usuario y el funcionamiento de las reglas de negocio descritas (Radicación, Auto-registro, Gestión de Estados), realizaremos una demostración directa sobre el sistema desplegado.
-                </p>
+            <div class="diagram-container" style="border-color: #bc8cff;">
+                <!-- AQUÍ VA TU IMAGEN DEL FLUJO -->
+                <!-- Asegúrate de colocar la imagen en la misma carpeta o poner la ruta correcta -->
+                <img src="Diagrama_Flujo_PQRS.png" alt="Flujo del Sistema PQRS" class="diagram-img">
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <p style="font-size: 0.9rem; font-style: italic;">El flujo garantiza una separación clara de responsabilidades entre el Cliente y el Gestor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVO: 4. CASOS DE USO Y ESPECIFICACIONES -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-users-gear highlight-blue"></i> Casos de Uso y Especificaciones</h2>
+            <p style="margin-bottom: 30px;">Modelado de los actores principales y las acciones fundamentales que desencadenan el comportamiento del sistema.</p>
+            
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <!-- AQUÍ VA TU IMAGEN DE CASOS DE USO -->
+                    <div class="diagram-container" style="border-color: #58a6ff; margin-bottom: 0;">
+                        <img src="diagram_caso_de_us.png" alt="Diagrama de Casos de Uso" class="diagram-img">
+                    </div>
+                </div>
                 
-                <div style="margin-top: 30px;">
-                    <span class="badge badge-green" style="font-size: 1rem; padding: 10px 20px;">
-                        <i class="fa-solid fa-bolt mr-2"></i> PWA Cliente
-                    </span>
-                    <span class="badge badge-orange" style="font-size: 1rem; padding: 10px 20px; margin-left: 10px;">
-                        <i class="fa-solid fa-user-tie mr-2"></i> Panel Gestor
-                    </span>
+                <div class="card" style="border-color: #3fb950;">
+                    <h3 class="highlight-green"><i class="fa-solid fa-list-check"></i> Especificaciones Centrales</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Las reglas de negocio están rigurosamente documentadas en nuestras plantillas de especificación:</p>
+                    
+                    <ul style="font-size: 0.95rem;">
+                        <li style="margin-bottom: 15px;">
+                            <i class="fa-solid fa-user highlight-blue" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Actor Cliente:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Interactúa principalmente radicando nuevas PQRS (generación de código y subida de PDF), validando su identidad (Auto-registro) y consultando su propio historial de manera aislada.</span>
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <i class="fa-solid fa-user-tie highlight-orange" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Actor Gestor:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Audita el sistema. Encargado de filtrar las peticiones, descargar los anexos y cambiar el estado (Nuevo → En Proceso → Resuelto) <strong>con justificación obligatoria.</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-word highlight-purple" style="font-size: 1.2rem;"></i> 
+                            <div>
+                                <strong style="color: #fff;">Flujos y Excepciones:</strong> 
+                                <span style="display: block; font-size: 0.85rem; margin-top: 4px;">Nuestras especificaciones de CU contemplan precondiciones, postcondiciones y caminos alternos, evitando cuellos de botella durante el desarrollo de los Sprints.</span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
+
+    
+
+    
 
     <!-- 8. ARQUITECTURA -->
     <section class="slide">
@@ -422,7 +402,7 @@
         </div>
     </section>
 
-    <!-- 10. TECNOLOGÍAS -->
+        <!-- 10. TECNOLOGÍAS -->
     <section class="slide">
         <div class="container">
             <h2><i class="fa-solid fa-layer-group highlight-purple"></i> Stack Tecnológico</h2>
@@ -453,6 +433,30 @@
                         <i class="fa-solid fa-shield-halved highlight-green"></i>
                     </div>
                     <p style="font-size: 0.95rem;">PostgreSQL relacional. Seguridad con tokens JWT (Stateless) y cifrado local SHA-256.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. PROTOTIPO INTERACTIVO (Mención) -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-desktop highlight-blue"></i> Prototipo Interactivo</h2>
+            
+            <div class="card" style="border-color: #58a6ff; text-align: center; padding: 50px;">
+                <i class="fa-solid fa-laptop-code" style="font-size: 5rem; color: #58a6ff; margin-bottom: 20px;"></i>
+                <h3 style="justify-content: center; font-size: 2rem; margin-bottom: 20px;">Demostración del Sistema en Vivo</h3>
+                <p style="font-size: 1.2rem; color: #c9d1d9; max-width: 800px; margin: 0 auto;">
+                    Para visualizar de manera tangible la experiencia de usuario y el funcionamiento de las reglas de negocio descritas (Radicación, Auto-registro, Gestión de Estados), realizaremos una demostración directa sobre el sistema desplegado.
+                </p>
+                
+                <div style="margin-top: 30px;">
+                    <span class="badge badge-green" style="font-size: 1rem; padding: 10px 20px;">
+                        <i class="fa-solid fa-bolt mr-2"></i> PWA Cliente
+                    </span>
+                    <span class="badge badge-orange" style="font-size: 1rem; padding: 10px 20px; margin-left: 10px;">
+                        <i class="fa-solid fa-user-tie mr-2"></i> Panel Gestor
+                    </span>
                 </div>
             </div>
         </div>
