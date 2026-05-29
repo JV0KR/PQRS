@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación Final - Sistema PQRS SuperMarket</title>
+    
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para Íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* CONFIGURACIÓN BASE - SCROLL CORREGIDO */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #0d1117;
+            font-family: 'Urbanist', sans-serif;
+            color: #c9d1d9;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            /* Se elimina el scroll-snap estricto para permitir scrollear libremente en pantallas pequeñas */
+        }
+
+        /* DISEÑO DE LAS DIAPOSITIVAS */
+        .slide {
+            min-height: 100vh; /* Permite que la diapositiva crezca si hay mucho texto */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #21262d; /* Separador sutil entre diapositivas */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* TIPOGRAFÍA Y COLORES */
+        h1, h2, h3, h4 { margin-top: 0; color: #ffffff; }
+        
+        h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 15px; }
+        h2 { font-size: 2.5rem; font-weight: 700; border-bottom: 2px solid #30363d; padding-bottom: 15px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight-blue { color: #58a6ff; }
+        .highlight-green { color: #3fb950; }
+        .highlight-orange { color: #f0883e; }
+        .highlight-purple { color: #bc8cff; }
+
+        p { font-size: 1.1rem; line-height: 1.6; color: #8b949e; }
+        ul { list-style: none; padding: 0; }
+        li { font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
+        li i { margin-top: 5px; }
+
+        /* GRID Y TARJETAS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        
+        .card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+            box-shadow: 0 8px 20px rgba(88, 166, 255, 0.1);
+        }
+
+        .card h3 { font-size: 1.4rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* ELEMENTOS ESPECIALES */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .badge-green { background: rgba(63, 185, 80, 0.1); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.3); }
+        .badge-blue { background: rgba(88, 166, 255, 0.1); color: #58a6ff; border: 1px solid rgba(88, 166, 255, 0.3); }
+
+        .team-member { display: flex; align-items: center; gap: 15px; background: #0d1117; padding: 15px; border-radius: 8px; border: 1px solid #21262d; }
+        .team-member i { font-size: 1.5rem; width: 30px; text-align: center; }
+
+        /* ESTILOS PARA LA IMAGEN RESPONSIVA */
+        .diagram-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .diagram-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            /* Añade una pequeña sombra para resaltar la imagen */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PORTADA -->
+    <section class="slide" id="inicio">
+        <div class="container" style="text-align: center; max-width: 900px;">
+            <i class="fa-solid fa-cart-shopping text-gradient" style="font-size: 5rem; margin-bottom: 20px;"></i>
+            <h1>Sistema <span class="text-gradient">PQRS</span></h1>
+            <p style="font-size: 1.5rem; color: #fff; margin-bottom: 40px;">Cliente: SuperMarket</p>
+            
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 30px;">
+                <h3 style="color: #58a6ff; margin-bottom: 20px;">Fábrica de Desarrollo Konrad - Equipo K3</h3>
+                <div class="grid-2">
+                    <div class="team-member">
+                        <i class="fa-solid fa-user-astronaut highlight-blue"></i>
+                        <div>
+                            <strong style="color: #fff; display: block;">Yeferson Linares</strong>
+                            <span style="font-size: 0.9rem;">Scrum Master / Backend</span>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <i class="fa-solid fa-laptop-code highlight-green"></i>
+                        <div>
+                            <strong style="color: #fff; display: block;">Brayan</strong>
+                            <span style="font-size: 0.9rem;">Frontend Developer</span>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <i class="fa-solid fa-database highlight-orange"></i>
+                        <div>
+                            <strong style="color: #fff; display: block;">Joseph</strong>
+                            <span style="font-size: 0.9rem;">BD / Backend Developer</span>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <i class="fa-solid fa-vial-circle-check highlight-purple"></i>
+                        <div>
+                            <strong style="color: #fff; display: block;">Yakelin</strong>
+                            <span style="font-size: 0.9rem;">Analista QA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.9rem;"><i class="fa-solid fa-arrow-down fa-bounce"></i> Desliza hacia abajo para continuar</p>
+        </div>
+    </section>
+
+    <!-- 2. PROBLEMÁTICA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-triangle-exclamation highlight-orange"></i> Problemática y Estrategia</h2>
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <p style="color: #fff; font-size: 1.2rem; margin-bottom: 20px;">SuperMarket requiere modernizar la atención a sus clientes tras la recepción de compras online.</p>
+                    <h4 style="color: #58a6ff; margin-bottom: 15px;">Desafíos Actuales:</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-xmark text-red-500" style="color: #f85149;"></i> <span style="color: #c9d1d9;">Alta carga de papeleo físico en sucursales.</span></li>
+                        <li><i class="fa-solid fa-clock text-red-500" style="color: #f85149;"></i> <span style="color: #c9d1d9;">Tiempos de respuesta lentos en trámites.</span></li>
+                        <li><i class="fa-solid fa-eye-slash text-red-500" style="color: #f85149;"></i> <span style="color: #c9d1d9;">Falta de trazabilidad real en los reclamos.</span></li>
+                    </ul>
+                </div>
+                <div class="card" style="text-align: center; border-color: #3fb950;">
+                    <i class="fa-solid fa-leaf highlight-green" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h3 style="justify-content: center; color: #fff;">Estrategia Institucional</h3>
+                    <p>Apoyar las iniciativas de <strong style="color: #3fb950;">"Cero Papel"</strong> y cultura <strong style="color: #3fb950;">"Anti-trámites"</strong> mediante un canal 100% digital, ecológico y eficiente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVO: SECCIÓN DE FLUJO DEL SISTEMA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-diagram-project highlight-purple"></i> Flujo del Sistema PQRS</h2>
+            <p style="margin-bottom: 20px;">Una vista general del recorrido de la información desde que el usuario radica hasta su resolución.</p>
+            
+            <div class="diagram-container" style="border-color: #bc8cff;">
+                <!-- AQUÍ VA TU IMAGEN DEL FLUJO -->
+                <!-- Asegúrate de colocar la imagen en la misma carpeta o poner la ruta correcta -->
+                <img src="Diagrama_Flujo_PQRS.png" alt="Flujo del Sistema PQRS" class="diagram-img">
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <p style="font-size: 0.9rem; font-style: italic;">El flujo garantiza una separación clara de responsabilidades entre el Cliente y el Gestor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MÓDULO CLIENTE (SEPARADO) -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-mobile-screen highlight-blue"></i> Funcionalidades: Módulo Cliente</h2>
+            <p style="margin-bottom: 30px;">Diseñado bajo la filosofía Mobile-First (PWA) para garantizar acceso desde cualquier dispositivo sin fricciones.</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <span class="badge badge-blue">RF-001</span>
+                    <h3 class="highlight-blue"><i class="fa-solid fa-file-signature"></i> Radicación Inteligente</h3>
+                    <p>Creación automática de un código de seguimiento único (formato <code>PQRS-YYYY-NNNNN</code>). El sistema permite adjuntar soportes (anexos PDF/Imágenes) de forma segura.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="badge badge-blue">RF-003</span>
+                    <h3 class="highlight-blue"><i class="fa-solid fa-user-plus"></i> Auto-Registro Cero Fricción</h3>
+                    <p>Si un usuario es nuevo, el backend lo detecta y lo registra automáticamente durante su primera radicación. Se genera una clave cifrada (SHA-256) que es enviada directamente a su correo electrónico.</p>
+                </div>
+
+                <div class="card">
+                    <span class="badge badge-green">Seguridad</span>
+                    <h3 class="highlight-green"><i class="fa-solid fa-shield-halved"></i> Autenticación y Sesiones</h3>
+                    <p>Acceso seguro mediante validación de credenciales. Las sesiones se controlan mediante tokens JWT con una expiración estricta de 30 minutos para proteger la privacidad del cliente en dispositivos públicos.</p>
+                </div>
+
+                <div class="card">
+                    <span class="badge badge-green">Experiencia UX</span>
+                    <h3 class="highlight-green"><i class="fa-solid fa-clock-rotate-left"></i> Historial Personalizado</h3>
+                    <p>El cliente tiene acceso a un dashboard exclusivo donde solo puede visualizar el estado y la trazabilidad de sus propias PQRS radicadas, garantizando la confidencialidad de la información.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MÓDULO GESTOR (SEPARADO) -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-user-tie highlight-orange"></i> Funcionalidades: Módulo Gestor</h2>
+            <p style="margin-bottom: 30px;">Panel administrativo web optimizado para la gestión masiva, auditoría y resolución de radicados de SuperMarket.</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <span class="badge badge-orange" style="background: rgba(240, 136, 62, 0.1); color: #f0883e; border: 1px solid rgba(240, 136, 62, 0.3);">Operatividad</span>
+                    <h3 class="highlight-orange"><i class="fa-solid fa-filter"></i> Listado y Filtros Avanzados</h3>
+                    <p>Vista global de todas las PQRS. El gestor puede aplicar filtros acumulativos y dinámicos (por Tipo de radicado o Estado actual) para priorizar la atención y cumplir con los tiempos de respuesta (SLA).</p>
+                </div>
+                
+                <div class="card" style="border-color: #f85149;">
+                    <span class="badge badge-red" style="background: rgba(248, 81, 73, 0.1); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.3);">RF-008 Crítico</span>
+                    <h3 style="color: #f85149;"><i class="fa-solid fa-gavel"></i> Auditoría de Estados Estricta</h3>
+                    <p>Flujo de estados controlado (Nuevo → En Proceso → Resuelto). El sistema <strong>exige obligatoriamente</strong> una justificación detallada (máx. 500 caracteres) para cada cambio, garantizando una trazabilidad legal incorruptible.</p>
+                </div>
+
+                <div class="card">
+                    <span class="badge badge-purple" style="background: rgba(188, 140, 255, 0.1); color: #bc8cff; border: 1px solid rgba(188, 140, 255, 0.3);">Rendimiento</span>
+                    <h3 class="highlight-purple"><i class="fa-solid fa-file-pdf"></i> Reportes PDF Dinámicos</h3>
+                    <p>Generación de reportes consolidados en formato PDF. Para proteger el SLA del backend (< 3 segundos), el procesamiento y renderizado del documento se delega completamente al frontend (JavaScript).</p>
+                </div>
+
+                <div class="card">
+                    <span class="badge badge-green">Seguridad</span>
+                    <h3 class="highlight-green"><i class="fa-solid fa-key"></i> Sesiones Administrativas</h3>
+                    <p>Control de acceso robusto para empleados. Los tokens JWT de los gestores cuentan con un tiempo de vida extendido de 60 minutos, permitiendo jornadas de trabajo continuo sin interrupciones constantes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVO: PROTOTIPO INTERACTIVO (Mención) -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-desktop highlight-blue"></i> Prototipo Interactivo</h2>
+            
+            <div class="card" style="border-color: #58a6ff; text-align: center; padding: 50px;">
+                <i class="fa-solid fa-laptop-code" style="font-size: 5rem; color: #58a6ff; margin-bottom: 20px;"></i>
+                <h3 style="justify-content: center; font-size: 2rem; margin-bottom: 20px;">Demostración del Sistema en Vivo</h3>
+                <p style="font-size: 1.2rem; color: #c9d1d9; max-width: 800px; margin: 0 auto;">
+                    Para visualizar de manera tangible la experiencia de usuario y el funcionamiento de las reglas de negocio descritas (Radicación, Auto-registro, Gestión de Estados), realizaremos una demostración directa sobre el sistema desplegado.
+                </p>
+                
+                <div style="margin-top: 30px;">
+                    <span class="badge badge-green" style="font-size: 1rem; padding: 10px 20px;">
+                        <i class="fa-solid fa-bolt mr-2"></i> PWA Cliente
+                    </span>
+                    <span class="badge badge-orange" style="font-size: 1rem; padding: 10px 20px; margin-left: 10px;">
+                        <i class="fa-solid fa-user-tie mr-2"></i> Panel Gestor
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. ARQUITECTURA SEPARADA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-network-wired highlight-blue"></i> Arquitectura del Sistema</h2>
+            <p style="margin-bottom: 20px;">Diseño desacoplado (Cliente-Servidor) enfocado en alta disponibilidad e independencia de capas.</p>
+            
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <!-- Reemplaza "Diagrama_arquitectura.png" con el nombre real de tu archivo si es diferente -->
+                    <div class="diagram-container">
+                        <img src="Diagrama_arquitectura.png" alt="Diagrama de Arquitectura" class="diagram-img">
+                    </div>
+                </div>
+                <div>
+                    <div class="card" style="margin-bottom: 20px; border-color: #58a6ff;">
+                        <h3 class="highlight-blue"><i class="fa-solid fa-layer-group"></i> Ventajas del Desacoplamiento</h3>
+                        <ul style="margin-top: 15px;">
+                            <li><i class="fa-solid fa-check highlight-green"></i> <strong>Independencia:</strong> Si el frontend PWA sufre una caída, la API REST en el backend sigue funcional y procesando peticiones.</li>
+                            <li><i class="fa-solid fa-check highlight-green"></i> <strong>Escalabilidad:</strong> El uso de servidor embebido Tomcat facilita el futuro despliegue en contenedores (Docker).</li>
+                            <li><i class="fa-solid fa-check highlight-green"></i> <strong>Estandarización:</strong> Comunicación fluida y ligera mediante JSON, reduciendo el consumo de ancho de banda.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. BASE DE DATOS SEPARADA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-database highlight-green"></i> Modelo de Base de Datos</h2>
+            <p style="margin-bottom: 20px;">Estructura relacional normalizada en PostgreSQL para garantizar integridad referencial y cumplir con el SLA de latencia.</p>
+
+            <div class="grid-2" style="align-items: start;">
+                <div>
+                    <div class="card" style="border-color: #3fb950; margin-bottom: 20px;">
+                        <h3 class="highlight-green"><i class="fa-solid fa-table-columns"></i> Estructura Normalizada</h3>
+                        <div style="background: #0d1117; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; border: 1px solid #21262d;">
+                            <span style="color: #bc8cff; font-weight: bold;"># Maestros (Entidades Principales)</span><br>
+                            - <span style="color: #c9d1d9;">Usuario</span> <span style="color: #8b949e;">(PK: id, email, pass_hash, rol)</span><br>
+                            - <span style="color: #c9d1d9;">Cliente</span> <span style="color: #8b949e;">(PK: id, FK: usr_id, doc...)</span><br>
+                            - <span style="color: #c9d1d9;">Gestor</span> <span style="color: #8b949e;">(PK: id, FK: usr_id, area)</span><br><br>
+                            <span style="color: #3fb950; font-weight: bold;"># Transaccional (Lógica de Negocio)</span><br>
+                            - <span style="color: #c9d1d9;">PQRS</span> <span style="color: #8b949e;">(PK: radicado, FK: cl_id, estado)</span><br>
+                            - <span style="color: #c9d1d9;">Anexos</span> <span style="color: #8b949e;">(PK: id, FK: pqrs_id, ruta)</span><br>
+                            - <span style="color: #c9d1d9;">Historial</span> <span style="color: #8b949e;">(PK: id, FK: pqrs_id, justificacion)</span>
+                        </div>
+                        <p style="font-size: 0.85rem; margin-top: 15px; font-style: italic; color: #8b949e;">
+                            <i class="fa-solid fa-bolt highlight-orange mr-2"></i> Un diseño libre de redundancias permite búsquedas eficientes y respuestas de la API en menos de 3 segundos.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                     <!-- Reemplaza "Diagrama_Relacional.png" (o pdf si usas un visor) con tu archivo. 
+                          Si tienes solo el PDF, lo ideal es convertirlo a PNG/JPG para la web, 
+                          o usar un <iframe> o <object> -->
+                    <div class="diagram-container">
+                        <!-- Ejemplo si lo conviertes a imagen (recomendado para web) -->
+                        <img src="Diagrama_Relacional.png" alt="Diagrama Entidad-Relación" class="diagram-img">
+                        
+                        <!-- Si necesitas cargar el PDF directamente, comenta el <img> arriba y descomenta abajo: -->
+                        <!-- <embed src="Diagrama_Relacional.pdf" width="100%" height="400px" type="application/pdf"> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. TECNOLOGÍAS -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-layer-group highlight-purple"></i> Stack Tecnológico</h2>
+            <div class="grid-3">
+                <div class="card" style="text-align: center; border-top: 4px solid #f0883e;">
+                    <h3 style="justify-content: center;">Frontend (PWA)</h3>
+                    <div style="font-size: 3rem; margin: 20px 0;">
+                        <i class="fa-brands fa-html5 highlight-orange"></i>
+                        <i class="fa-brands fa-css3-alt highlight-blue"></i>
+                        <i class="fa-brands fa-js" style="color: #f7df1e;"></i>
+                    </div>
+                    <p style="font-size: 0.95rem;">HTML, CSS y JS Puro. Mobile-First sin frameworks pesados para maximizar la velocidad de carga.</p>
+                </div>
+
+                <div class="card" style="text-align: center; border-top: 4px solid #f85149;">
+                    <h3 style="justify-content: center;">Backend</h3>
+                    <div style="font-size: 3rem; margin: 20px 0;">
+                        <i class="fa-brands fa-java" style="color: #f85149;"></i>
+                        <i class="fa-solid fa-leaf highlight-green"></i>
+                    </div>
+                    <p style="font-size: 0.95rem;">Java + Spring Boot. Uso de Spring Data JPA (Hibernate) para un mapeo ORM seguro y robusto.</p>
+                </div>
+
+                <div class="card" style="text-align: center; border-top: 4px solid #58a6ff;">
+                    <h3 style="justify-content: center;">Datos & Infra</h3>
+                    <div style="font-size: 3rem; margin: 20px 0;">
+                        <i class="fa-solid fa-database highlight-blue"></i>
+                        <i class="fa-solid fa-shield-halved highlight-green"></i>
+                    </div>
+                    <p style="font-size: 0.95rem;">PostgreSQL relacional. Seguridad con tokens JWT (Stateless) y cifrado local SHA-256.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. VENTAJA COMPETITIVA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-rocket highlight-green"></i> Ventaja Competitiva</h2>
+            <p style="margin-bottom: 30px;">¿Por qué nuestra solución aporta más valor a SuperMarket que otros productos del mercado?</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="highlight-blue"><i class="fa-solid fa-mobile-screen-button"></i> PWA vs App Nativa</h3>
+                    <p>No obligamos al cliente a buscar, descargar y actualizar una app pesada. Nuestra solución se instala en segundos desde el navegador, ahorrando costos de publicación en tiendas y democratizando el acceso a celulares de gama baja.</p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="highlight-green"><i class="fa-solid fa-microchip"></i> Offloading de Procesamiento</h3>
+                    <p>A diferencia de monolitos que colapsan generando PDFs, delegamos la renderización de reportes al procesador del cliente (JS). Esto libera recursos del servidor y garantiza un SLA < 3s, reduciendo costos de nube.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. METODOLOGÍA Y QA -->
+    <section class="slide">
+        <div class="container">
+            <h2><i class="fa-solid fa-vial-circle-check highlight-blue"></i> Calidad (QA) y Metodología</h2>
+            <div class="grid-2">
+                <div>
+                    <h3 class="highlight-green"><i class="fa-solid fa-rotate"></i> Gestión Ágil (Scrum)</h3>
+                    <ul style="margin-top: 20px;">
+                        <li><i class="fa-solid fa-check highlight-green"></i> <span><strong>4 Sprints Completados:</strong> Entregas iterativas.</span></li>
+                        <li><i class="fa-solid fa-check highlight-green"></i> <span><strong>Burn Down Charts:</strong> Control estricto de velocidad del equipo K3.</span></li>
+                        <li><i class="fa-solid fa-check highlight-green"></i> <span><strong>Integración Continua:</strong> Ramas controladas en Git (`main` y `docs`).</span></li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3 style="color: #fff; justify-content: center; margin-bottom: 20px;"><i class="fa-solid fa-clipboard-check highlight-blue"></i> Definition of Done (DoD)</h3>
+                    <p style="text-align: center; margin-bottom: 15px; font-size: 0.95rem;">Ninguna HU pasó a 'Terminada' sin cumplir:</p>
+                    <div style="background: #0d1117; padding: 15px; border-radius: 8px; border-left: 4px solid #3fb950; font-size: 0.95rem;">
+                        <p style="margin: 0 0 10px 0;"><i class="fa-solid fa-bug-slash highlight-green" style="margin-right: 8px;"></i> Pruebas unitarias ejecutadas (QA).</p>
+                        <p style="margin: 0 0 10px 0;"><i class="fa-solid fa-code highlight-green" style="margin-right: 8px;"></i> Código limpio y refactorizado.</p>
+                        <p style="margin: 0 0 10px 0;"><i class="fa-solid fa-server highlight-green" style="margin-right: 8px;"></i> Despliegue funcional en local.</p>
+                        <p style="margin: 0;"><i class="fa-solid fa-stopwatch highlight-green" style="margin-right: 8px;"></i> Cumplimiento estricto de SLAs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CONCLUSIONES -->
+    <section class="slide">
+        <div class="container" style="text-align: center; max-width: 800px;">
+            <i class="fa-regular fa-handshake highlight-green" style="font-size: 5rem; margin-bottom: 30px;"></i>
+            <h2 style="justify-content: center; border: none; margin-bottom: 20px;">Conclusión</h2>
+            <p style="font-size: 1.3rem; color: #fff; margin-bottom: 40px;">El Sistema PQRS del equipo K3 dota a SuperMarket de un ecosistema escalable, amigable para el cliente y blindado en seguridad, convirtiendo la filosofía <strong>"Cero Papel"</strong> en una realidad operativa real.</p>
+            
+            <hr style="border-color: #30363d; margin-bottom: 40px;">
+            
+            <h1 style="font-size: 3rem; color: #58a6ff;">¿Preguntas?</h1>
+            <p>Estamos listos para la defensa técnica.</p>
+        </div>
+    </section>
+
+</body>
+</html>
