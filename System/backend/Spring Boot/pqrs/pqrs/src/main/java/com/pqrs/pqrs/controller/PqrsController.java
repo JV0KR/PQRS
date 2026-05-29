@@ -22,8 +22,8 @@ public class PqrsController {
         this.service = service;
     }
 
-    @PostMapping("/radicar-publico")
-    public ResponseEntity<?> radicarPublico(@Valid @RequestBody RadicacionPublicaDTO dto) {
+    @PostMapping(value = "/radicar-publico", consumes = {org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> radicarPublico(@Valid @ModelAttribute RadicacionPublicaDTO dto) {
         try {
             PqrsResponseDTO response = service.radicarPublico(dto);
             return ResponseEntity.ok(response);
@@ -32,8 +32,8 @@ public class PqrsController {
         }
     }
 
-    @PostMapping("/radicar")
-    public ResponseEntity<?> radicar(@Valid @RequestBody RadicarPqrsDTO dto) {
+    @PostMapping(value = "/radicar", consumes = {org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> radicar(@Valid @ModelAttribute RadicarPqrsDTO dto) {
         try {
             PqrsResponseDTO response = service.radicar(dto);
             return ResponseEntity.ok(response);

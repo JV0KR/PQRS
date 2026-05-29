@@ -14,20 +14,23 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
+    private final GestorRepository gestorRepository;
     private final PerfilRepository perfilRepository;
     private final TipoIdentificacionRepository tipoIdentificacionRepository;
 
     public AuthService(UsuarioRepository usuarioRepository,
                        ClienteRepository clienteRepository,
+                       GestorRepository gestorRepository,
                        PerfilRepository perfilRepository,
                        TipoIdentificacionRepository tipoIdentificacionRepository) {
         this.usuarioRepository = usuarioRepository;
         this.clienteRepository = clienteRepository;
+        this.gestorRepository = gestorRepository;
         this.perfilRepository = perfilRepository;
         this.tipoIdentificacionRepository = tipoIdentificacionRepository;
     }
 
-    public ClienteResponseDTO login(LoginDTO dto) {
+    public LoginResponseDTO login(LoginDTO dto) {
         Usuario usuario = usuarioRepository.findByCorreo(dto.getCorreo())
                 .orElseThrow(() -> new RuntimeException("Credenciales invalidas"));
 
@@ -40,10 +43,27 @@ public class AuthService {
             throw new RuntimeException("Usuario inactivo");
         }
 
-        Cliente cliente = clienteRepository.findByUsuario(usuario)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        String perfilNombre = usuario.getPerfil().getNombre();
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setCorreo(usuario.getCorreo());
+        response.setPerfil(perfilNombre);
 
-        return toClienteResponse(cliente);
+        if ("CLIENTE".equals(perfilNombre)) {
+            Cliente cliente = clienteRepository.findByUsuario(usuario)
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            response.setId(cliente.getId());
+            response.setNombresCompletos(cliente.getNombresCompletos());
+        } else if ("GESTOR".equals(perfilNombre)) {
+            Gestor gestor = gestorRepository.findByUsuario(usuario)
+                    .orElseThrow(() -> new RuntimeException("Gestor no encontrado"));
+            response.setId(gestor.getId());
+            response.setNombresCompletos(gestor.getNombresCompletos());
+        } else {
+            response.setId(usuario.getId());
+            response.setNombresCompletos(usuario.getUsername());
+        }
+
+        return response;
     }
 
     @Transactional
@@ -64,7 +84,6 @@ public class AuthService {
         TipoIdentificacion tipoId = tipoIdentificacionRepository.findById(dto.getIdTipoIdentificacion())
                 .orElseThrow(() -> new RuntimeException("Tipo de identificacion no encontrado"));
 
-        // Crear usuario: correo como username, documento como contrasena
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.getCorreo());
         usuario.setPasswordHash(hashPassword(dto.getNumeroIdentificacion()));
@@ -72,7 +91,6 @@ public class AuthService {
         usuario.setPerfil(perfilCliente);
         usuario = usuarioRepository.save(usuario);
 
-        // Crear cliente
         Cliente cliente = new Cliente();
         cliente.setTipoIdentificacion(tipoId);
         cliente.setNumeroIdentificacion(dto.getNumeroIdentificacion());

@@ -1,6 +1,7 @@
 package com.pqrs.pqrs.dto;
 
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public class RadicarPqrsDTO {
     @NotNull
@@ -11,6 +12,7 @@ public class RadicarPqrsDTO {
 
     @NotBlank
     private String comentarios;
+    private MultipartFile archivo;
 
     public RadicarPqrsDTO() {}
 
@@ -20,4 +22,6 @@ public class RadicarPqrsDTO {
     public void setIdTipoRadicado(Long idTipoRadicado) { this.idTipoRadicado = idTipoRadicado; }
     public String getComentarios() { return comentarios; }
     public void setComentarios(String comentarios) { this.comentarios = comentarios; }
+    public MultipartFile getArchivo() { return archivo; }
+    public void setArchivo(MultipartFile archivo) { this.archivo = archivo; }
 }

@@ -11,6 +11,9 @@ public class PqrsResponseDTO {
     private String estado;
     private String nombreCliente;
     private String correoCliente;
+    private String justificacionEstado;
+    private Boolean tieneAnexo;
+    private Long idAnexo;
 
     public PqrsResponseDTO() {}
 
@@ -30,4 +33,10 @@ public class PqrsResponseDTO {
     public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
     public String getCorreoCliente() { return correoCliente; }
     public void setCorreoCliente(String correoCliente) { this.correoCliente = correoCliente; }
+    public String getJustificacionEstado() { return justificacionEstado; }
+    public void setJustificacionEstado(String justificacionEstado) { this.justificacionEstado = justificacionEstado; }
+    public Boolean getTieneAnexo() { return tieneAnexo; }
+    public void setTieneAnexo(Boolean tieneAnexo) { this.tieneAnexo = tieneAnexo; }
+    public Long getIdAnexo() { return idAnexo; }
+    public void setIdAnexo(Long idAnexo) { this.idAnexo = idAnexo; }
 }

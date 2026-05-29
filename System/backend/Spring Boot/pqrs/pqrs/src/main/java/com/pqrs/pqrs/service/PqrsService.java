@@ -26,6 +26,8 @@ public class PqrsService {
     private final EstadoPqrsRepository estadoPqrsRepository;
     private final PerfilRepository perfilRepository;
     private final TipoIdentificacionRepository tipoIdentificacionRepository;
+    private final PqrsAnexoRepository pqrsAnexoRepository;
+    private final FileStorageService fileStorageService;
 
     public PqrsService(PqrsRepository pqrsRepository,
                        ClienteRepository clienteRepository,
@@ -33,7 +35,7 @@ public class PqrsService {
                        TipoRadicadoRepository tipoRadicadoRepository,
                        EstadoPqrsRepository estadoPqrsRepository,
                        PerfilRepository perfilRepository,
-                       TipoIdentificacionRepository tipoIdentificacionRepository) {
+                       TipoIdentificacionRepository tipoIdentificacionRepository, PqrsAnexoRepository pqrsAnexoRepository, FileStorageService fileStorageService) {
         this.pqrsRepository = pqrsRepository;
         this.clienteRepository = clienteRepository;
         this.usuarioRepository = usuarioRepository;
@@ -41,6 +43,8 @@ public class PqrsService {
         this.estadoPqrsRepository = estadoPqrsRepository;
         this.perfilRepository = perfilRepository;
         this.tipoIdentificacionRepository = tipoIdentificacionRepository;
+        this.pqrsAnexoRepository = pqrsAnexoRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     @Transactional
@@ -79,6 +83,18 @@ public class PqrsService {
         pqrs = pqrsRepository.save(pqrs);
 
         // 3. Enviar Correo de Confirmacion
+                // Guardar anexo si existe
+        if (dto.getArchivo() != null && !dto.getArchivo().isEmpty()) {
+            String ruta = fileStorageService.storeFile(dto.getArchivo(), pqrs.getNumeroRadicado());
+            PqrsAnexo anexo = new PqrsAnexo();
+            anexo.setPqrs(pqrs);
+            anexo.setNombreArchivo(dto.getArchivo().getOriginalFilename());
+            anexo.setRutaArchivo(ruta);
+            anexo.setMimeType(dto.getArchivo().getContentType());
+            anexo.setTamanoBytes(dto.getArchivo().getSize());
+            pqrsAnexoRepository.save(anexo);
+        }
+
         enviarCorreoConfirmacion(cliente, pqrs);
 
         return toResponse(pqrs);
@@ -138,6 +154,18 @@ public class PqrsService {
         pqrs.setUsuarioCrea(cliente.getUsuario());
 
         pqrs = pqrsRepository.save(pqrs);
+                // Guardar anexo si existe
+        if (dto.getArchivo() != null && !dto.getArchivo().isEmpty()) {
+            String ruta = fileStorageService.storeFile(dto.getArchivo(), pqrs.getNumeroRadicado());
+            PqrsAnexo anexo = new PqrsAnexo();
+            anexo.setPqrs(pqrs);
+            anexo.setNombreArchivo(dto.getArchivo().getOriginalFilename());
+            anexo.setRutaArchivo(ruta);
+            anexo.setMimeType(dto.getArchivo().getContentType());
+            anexo.setTamanoBytes(dto.getArchivo().getSize());
+            pqrsAnexoRepository.save(anexo);
+        }
+
         enviarCorreoConfirmacion(cliente, pqrs);
 
         return toResponse(pqrs);
@@ -188,6 +216,11 @@ public class PqrsService {
         dto.setEstado(pqrs.getEstadoActual().getNombre());
         dto.setNombreCliente(pqrs.getCliente().getNombresCompletos());
         dto.setCorreoCliente(pqrs.getCliente().getCorreo());
+        dto.setJustificacionEstado(pqrs.getJustificacionEstado());
+        pqrsAnexoRepository.findByPqrs(pqrs).ifPresent(anexo -> {
+            dto.setTieneAnexo(true);
+            dto.setIdAnexo(anexo.getId());
+        });
         return dto;
     }
 }

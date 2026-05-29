@@ -222,3 +222,17 @@ JOIN opcion o ON (
 -- Base para contraseÃ±a cifrada:
 -- En la aplicaciÃ³n se debe guardar password_hash con bcrypt/argon2, no texto plano.
 
+-- Gestor de prueba (correo: gestor@supermarket.com, password: admin123)
+-- SHA-256 of 'admin123' = 240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9
+INSERT INTO usuario (username, password_hash, correo, id_perfil)
+SELECT 'gestor@supermarket.com',
+       '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+       'gestor@supermarket.com',
+       p.id_perfil
+FROM perfil p WHERE p.nombre = 'GESTOR';
+
+INSERT INTO gestor (nombres_completos, correo, id_usuario)
+SELECT 'Carlos Ramirez Gestor',
+       'gestor@supermarket.com',
+       u.id_usuario
+FROM usuario u WHERE u.correo = 'gestor@supermarket.com';

@@ -3,6 +3,7 @@ package com.pqrs.pqrs.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 public class RadicacionPublicaDTO {
     @NotNull
@@ -20,6 +21,7 @@ public class RadicacionPublicaDTO {
     private Long idTipoRadicado;
     @NotBlank
     private String comentarios;
+    private MultipartFile archivo;
 
     public RadicacionPublicaDTO() {}
 
@@ -37,4 +39,6 @@ public class RadicacionPublicaDTO {
     public void setIdTipoRadicado(Long idTipoRadicado) { this.idTipoRadicado = idTipoRadicado; }
     public String getComentarios() { return comentarios; }
     public void setComentarios(String comentarios) { this.comentarios = comentarios; }
+    public MultipartFile getArchivo() { return archivo; }
+    public void setArchivo(MultipartFile archivo) { this.archivo = archivo; }
 }
