@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Radicar PQRS – SuperMarket</title>
+<style>
+*{box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:0;}
+header{background:#1f4e79;color:white;padding:15px;text-align:center;}
+header p{margin:4px 0 0;font-size:13px;opacity:0.8;}
+.container{width:90%;max-width:600px;margin:30px auto;background:white;padding:24px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.back{margin-bottom:16px;} .back a{color:#1f4e79;font-size:13px;text-decoration:none;}
+.back a:hover{text-decoration:underline;}
+label{display:block;margin-top:12px;font-weight:bold;font-size:14px;color:#333;}
+input,select,textarea{width:100%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px;font-size:14px;}
+input.error,select.error,textarea.error{border-color:#dc3545;}
+.field-error{color:#dc3545;font-size:12px;margin:2px 0 0;display:none;}
+.row{display:flex;gap:10px;} .row>div{flex:1;}
+.note{font-size:12px;color:#888;margin:2px 0 0;}
+.char-count{font-size:12px;color:#888;text-align:right;margin-top:2px;}
+.char-count.warn{color:#fd7e14;} .char-count.over{color:#dc3545;}
+button{background:#1f4e79;color:white;border:none;padding:11px 20px;border-radius:5px;cursor:pointer;font-size:14px;margin-top:16px;}
+button:hover{background:#163b5c;}
+button:disabled{background:#aaa;cursor:not-allowed;}
+hr{border:none;border-top:1px solid #eee;margin:18px 0;}
+.alert{padding:12px;border-radius:5px;margin:12px 0;font-size:13px;}
+.alert.error{background:#f8d7da;color:#842029;border:1px solid #f5c2c7;}
+/* Confirmación */
+.confirm-box{display:none;background:#f0f8ff;border:1px solid #b6d4fe;border-radius:8px;padding:24px;text-align:center;}
+.confirm-box h3{color:#0d47a1;margin-top:0;}
+.radicado-num{font-size:26px;font-weight:bold;color:#1f4e79;letter-spacing:2px;margin:10px 0;}
+.confirm-box p{font-size:14px;color:#444;}
+.confirm-box .sub{font-size:13px;color:#666;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Radicar PQRS</h1>
+  <p>SuperMarket – Sistema de atención al cliente</p>
+</header>
+<div class="container">
+  <div class="back"><a href="index.html">← Volver al inicio</a></div>
+
+  <div id="formulario">
+    <h3 style="margin-top:0;color:#1f4e79">Datos del solicitante</h3>
+
+    <div class="row">
+      <div>
+        <label>Tipo de identificación *</label>
+        <select id="tipo_id">
+          <option value="">Seleccione</option>
+          <option value="Cédula">Cédula de ciudadanía</option>
+          <option value="Pasaporte">Pasaporte</option>
+          <option value="CE">Cédula de extranjería</option>
+        </select>
+        <div class="field-error" id="err-tipo_id">Seleccione el tipo de identificación.</div>
+      </div>
+      <div>
+        <label>Número de identificación *</label>
+        <input type="text" id="num_id" placeholder="Solo dígitos" maxlength="15" oninput="soloDigitos(this)">
+        <div class="field-error" id="err-num_id">Ingrese solo dígitos (máx. 15).</div>
+      </div>
+    </div>
+
+    <label>Nombre completo *</label>
+    <input type="text" id="nombre" placeholder="Nombres y apellidos completos" maxlength="100">
+    <div class="field-error" id="err-nombre">Solo letras, tildes y espacios (máx. 100 caracteres).</div>
+
+    <div class="row">
+      <div>
+        <label>Correo electrónico *</label>
+        <input type="email" id="email" placeholder="usuario@dominio.com" maxlength="150">
+        <p class="note">Recibirás el número de radicado y tu contraseña de acceso.</p>
+        <div class="field-error" id="err-email">Ingrese un correo electrónico válido.</div>
+      </div>
+      <div>
+        <label>Teléfono móvil *</label>
+        <input type="tel" id="tel" placeholder="+573001234567" maxlength="15">
+        <div class="field-error" id="err-tel">Formato E.164, ej: +573001234567 (máx. 15 car.).</div>
+      </div>
+    </div>
+
+    <hr>
+    <h3 style="color:#1f4e79">Detalle de la PQRS</h3>
+
+    <label>Tipo de radicado *</label>
+    <select id="tipo_pqrs">
+      <option value="">Seleccione el tipo</option>
+      <option>Petición</option>
+      <option>Queja</option>
+      <option>Reclamo</option>
+      <option>Sugerencia</option>
+    </select>
+    <div class="field-error" id="err-tipo_pqrs">Seleccione el tipo de radicado.</div>
+
+    <label>Comentarios * <span style="font-weight:normal;font-size:12px;color:#888">(máx. 1000 caracteres)</span></label>
+    <textarea rows="5" id="comentarios" maxlength="1000" placeholder="Describa detalladamente su solicitud…" oninput="contarChars()"></textarea>
+    <div class="char-count" id="char-count">0 / 1000</div>
+    <div class="field-error" id="err-comentarios">Los comentarios son obligatorios.</div>
+
+    <label>Adjuntar documento – opcional <span style="font-weight:normal;font-size:12px;color:#888">(solo PDF, máx. 5 MB)</span></label>
+    <input type="file" id="adjunto" accept=".pdf">
+    <div class="field-error" id="err-adjunto">Solo se permiten archivos PDF de máximo 5 MB.</div>
+
+    <br>
+    <button id="btn-enviar" onclick="radicar()">Enviar PQRS</button>
+  </div>
+
+  <!-- Pantalla de confirmación (RF-001) -->
+  <div class="confirm-box" id="confirmacion">
+    <h3>✔ PQRS radicada exitosamente</h3>
+    <p>Su número de radicado es:</p>
+    <div class="radicado-num" id="num-radicado"></div>
+    <p id="msg-cliente"></p>
+    <p class="sub">Se ha enviado un correo de confirmación a <strong id="email-confirm"></strong><br>con su número de radicado y contraseña de acceso.</p>
+    <p class="sub" style="color:#888">El sistema enviará el correo en máx. 2 minutos.</p>
+    <br>
+    <button onclick="window.location='login_cliente.html'">Iniciar sesión para consultar mi radicado</button>
+    &nbsp;
+    <button onclick="window.location='index.html'" style="background:#6c757d">Volver al inicio</button>
+  </div>
+</div>
+
+<script>
+function soloDigitos(el){el.value=el.value.replace(/\D/g,'');}
+
+function contarChars(){
+  const val=document.getElementById('comentarios').value.length;
+  const el=document.getElementById('char-count');
+  el.textContent=val+' / 1000';
+  el.className='char-count'+(val>900?' warn':'')+(val>=1000?' over':'');
+}
+
+function limpiarErrores(){
+  document.querySelectorAll('.field-error').forEach(e=>e.style.display='none');
+  document.querySelectorAll('input,select,textarea').forEach(e=>e.classList.remove('error'));
+}
+
+function mostrarError(id, inputId){
+  document.getElementById(id).style.display='block';
+  if(inputId) document.getElementById(inputId).classList.add('error');
+}
+
+function radicar(){
+  limpiarErrores();
+  let ok=true;
+
+  if(!document.getElementById('tipo_id').value){mostrarError('err-tipo_id','tipo_id');ok=false;}
+  const numId=document.getElementById('num_id').value.trim();
+  if(!numId||!/^\d{1,15}$/.test(numId)){mostrarError('err-num_id','num_id');ok=false;}
+  const nombre=document.getElementById('nombre').value.trim();
+  if(!nombre||nombre.length>100){mostrarError('err-nombre','nombre');ok=false;}
+  const email=document.getElementById('email').value.trim();
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){mostrarError('err-email','email');ok=false;}
+  const tel=document.getElementById('tel').value.trim();
+  if(!tel||tel.length>15){mostrarError('err-tel','tel');ok=false;}
+  if(!document.getElementById('tipo_pqrs').value){mostrarError('err-tipo_pqrs','tipo_pqrs');ok=false;}
+  const comentarios=document.getElementById('comentarios').value.trim();
+  if(!comentarios){mostrarError('err-comentarios','comentarios');ok=false;}
+
+  // Validar adjunto si hay
+  const adjunto=document.getElementById('adjunto').files[0];
+  if(adjunto){
+    if(adjunto.type!=='application/pdf'||adjunto.size>5*1024*1024){
+      mostrarError('err-adjunto','adjunto');ok=false;
+    }
+  }
+
+  if(!ok) return;
+
+  // Generar número radicado PQRS-YYYY-NNNNN
+  const year=new Date().getFullYear();
+  const seq=String(Math.floor(Math.random()*90000)+10000);
+  const num='PQRS-'+year+'-'+seq;
+
+  document.getElementById('num-radicado').textContent=num;
+  document.getElementById('email-confirm').textContent=email;
+  // Simular si es cliente nuevo (siempre lo tratamos como nuevo en el prototipo)
+  document.getElementById('msg-cliente').textContent=
+    'Como es su primera PQRS, recibirá también una contraseña temporal de 6 caracteres para acceder al sistema.';
+
+  document.getElementById('formulario').style.display='none';
+  document.getElementById('confirmacion').style.display='block';
+}
+</script>
+</body>
+</html>

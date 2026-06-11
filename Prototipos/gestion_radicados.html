@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gestión Radicados – PQRS</title>
+<style>
+*{box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:0;}
+header{background:#1f4e79;color:white;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;}
+header h1{margin:0;font-size:20px;}
+header span{font-size:13px;opacity:0.85;}
+.nav-bar{background:#163b5c;display:flex;gap:4px;padding:8px 20px;}
+.nav-bar a{color:rgba(255,255,255,0.8);text-decoration:none;padding:7px 14px;border-radius:4px;font-size:13px;}
+.nav-bar a:hover,.nav-bar a.active{background:rgba(255,255,255,0.15);color:white;}
+.container{width:90%;max-width:860px;margin:24px auto;}
+/* Filtros RF-005 */
+.filtros{background:white;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.filtros>div{flex:1;min-width:140px;}
+label{display:block;font-weight:bold;font-size:12px;color:#555;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;}
+input,select,textarea{width:100%;padding:9px;border:1px solid #ccc;border-radius:5px;font-size:13px;}
+/* Paginación */
+.paginacion{display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px;color:#555;}
+.paginacion button{padding:6px 12px;font-size:13px;}
+/* Cards */
+.card{background:white;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:14px;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.card-top h3{margin:0;color:#1f4e79;font-size:16px;}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold;}
+.badge.nuevo{background:#cfe2ff;color:#084298;}
+.badge.proceso{background:#fff3cd;color:#664d03;}
+.badge.resuelto{background:#d1e7dd;color:#0f5132;}
+.badge.rechazado{background:#f8d7da;color:#842029;}
+.meta{font-size:13px;color:#666;margin-bottom:8px;}
+.meta span{margin-right:14px;}
+.desc{font-size:13px;color:#444;background:#f8f9fa;padding:10px;border-radius:5px;margin-bottom:10px;}
+.anexo{display:flex;align-items:center;gap:10px;background:#f0f8ff;border:1px solid #b6d4fe;border-radius:5px;padding:8px 12px;margin-bottom:10px;font-size:13px;}
+/* RF-008: Cambiar estado */
+.panel-estado{border-top:1px solid #eee;padding-top:14px;}
+.row{display:flex;gap:10px;} .row>div{flex:1;}
+.char-count{font-size:12px;text-align:right;color:#888;margin-top:2px;}
+.char-count.warn{color:#fd7e14;} .char-count.over{color:#dc3545;}
+.field-error{color:#dc3545;font-size:12px;margin-top:2px;display:none;}
+button{background:#1f4e79;color:white;border:none;padding:9px 16px;border-radius:5px;cursor:pointer;font-size:13px;}
+button:hover{background:#163b5c;}
+button.success{background:#198754;} button.success:hover{background:#146c43;}
+button.secondary{background:#6c757d;} button.secondary:hover{background:#545b62;}
+.alert-ok{background:#d1e7dd;color:#0f5132;border:1px solid #badbcc;padding:9px 12px;border-radius:5px;font-size:13px;display:none;margin-top:8px;}
+/* Historial RF-008 RN-002 */
+.historial{margin-top:10px;}
+.historial h4{font-size:13px;color:#555;margin:8px 0 6px;}
+.tl-item{display:flex;gap:10px;margin-bottom:10px;}
+.tl-dot{width:9px;height:9px;border-radius:50%;background:#1f4e79;flex-shrink:0;margin-top:4px;}
+.tl-content .tl-date{font-size:11px;color:#999;}
+.tl-content .tl-text{font-size:13px;color:#333;}
+.no-results{text-align:center;color:#888;padding:40px;background:white;border-radius:10px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Gestión de Radicados</h1>
+  <span>👤 gestor01 &nbsp;|&nbsp; <a href="login_gestor.html" style="color:white">Cerrar sesión</a></span>
+</header>
+<div class="nav-bar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="gestion_radicados.html" class="active">Gestión Radicados</a>
+  <a href="reportes.html">Reportes</a>
+</div>
+<div class="container">
+
+  <!-- RF-005: Filtros tipo + estado (acumulativos - AND) -->
+  <div class="filtros">
+    <div>
+      <label>Tipo de PQRS</label>
+      <select id="fil-tipo" onchange="filtrar()">
+        <option value="">Todos</option>
+        <option>Petición</option><option>Queja</option>
+        <option>Reclamo</option><option>Sugerencia</option>
+      </select>
+    </div>
+    <div>
+      <label>Estado</label>
+      <select id="fil-estado" onchange="filtrar()">
+        <option value="">Todos</option>
+        <option>Nuevo</option><option>En proceso</option>
+        <option>Resuelto</option><option>Rechazado</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:flex-end">
+      <button onclick="resetFiltros()" class="secondary">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <!-- Paginación info (RF-005: 20 por página) -->
+  <div class="paginacion" id="paginacion-info"></div>
+
+  <div id="lista"></div>
+
+  <!-- Paginación botones -->
+  <div class="paginacion" id="paginacion-btns"></div>
+</div>
+
+<script>
+const POR_PAGINA=20;
+let paginaActual=1;
+
+const data=[
+  {id:'PQRS-2026-00006',tipo:'Petición',estado:'Nuevo',fecha:'27/05/2026',cliente:'Laura Morales',
+   desc:'Solicita información sobre política de devoluciones para productos electrónicos.',
+   anexo:null,
+   historial:[{fecha:'27/05/2026 09:00',estado:'Nuevo',just:'PQRS recibida. Estado inicial.',user:'Sistema'}]},
+  {id:'PQRS-2026-00005',tipo:'Queja',estado:'Nuevo',fecha:'26/05/2026',cliente:'Carlos Ruiz',
+   desc:'Mala atención por parte del personal en caja el día 25/05. Solicito revisión.',
+   anexo:'foto_caja.jpg',
+   historial:[{fecha:'26/05/2026 11:30',estado:'Nuevo',just:'PQRS recibida.',user:'Sistema'}]},
+  {id:'PQRS-2026-00004',tipo:'Reclamo',estado:'En proceso',fecha:'25/05/2026',cliente:'Ana Torres',
+   desc:'Cobro duplicado en factura #8812. Adjunto comprobante de pago.',
+   anexo:'factura_8812.pdf',
+   historial:[
+     {fecha:'25/05/2026 08:45',estado:'Nuevo',just:'PQRS recibida.',user:'Sistema'},
+     {fecha:'25/05/2026 15:20',estado:'En proceso',just:'Revisando la factura con el área de cartera.',user:'gestor01'}
+   ]},
+  {id:'PQRS-2026-00003',tipo:'Sugerencia',estado:'Resuelto',fecha:'22/05/2026',cliente:'Pedro Gómez',
+   desc:'Sugiere ampliar el horario de atención los domingos hasta las 8pm.',
+   anexo:null,
+   historial:[
+     {fecha:'22/05/2026 10:00',estado:'Nuevo',just:'PQRS recibida.',user:'Sistema'},
+     {fecha:'23/05/2026 09:10',estado:'Resuelto',just:'La sugerencia fue escalada a gerencia. Se tomará en cuenta para el próximo trimestre.',user:'gestor01'}
+   ]},
+  {id:'PQRS-2026-00002',tipo:'Reclamo',estado:'Resuelto',fecha:'10/05/2026',cliente:'María López',
+   desc:'Producto defectuoso recibido en mal estado. Solicita reposición inmediata.',
+   anexo:'foto_producto.jpg',
+   historial:[
+     {fecha:'10/05/2026 14:00',estado:'Nuevo',just:'PQRS recibida.',user:'Sistema'},
+     {fecha:'11/05/2026 08:30',estado:'En proceso',just:'Verificando con bodega el estado del producto.',user:'gestor01'},
+     {fecha:'12/05/2026 16:00',estado:'Resuelto',just:'Se procesó el reemplazo. Será enviado en 2-3 días hábiles.',user:'gestor01'}
+   ]},
+  {id:'PQRS-2026-00001',tipo:'Petición',estado:'En proceso',fecha:'19/05/2026',cliente:'Juan Pérez',
+   desc:'Necesito información sobre el estado de mi pedido #4521 realizado el 15 de mayo.',
+   anexo:'comprobante_4521.pdf',
+   historial:[
+     {fecha:'19/05/2026 09:14',estado:'Nuevo',just:'PQRS recibida. Correo de confirmación enviado.',user:'Sistema'},
+     {fecha:'20/05/2026 14:30',estado:'En proceso',just:'El caso está siendo revisado por soporte logístico.',user:'gestor01'}
+   ]},
+];
+const badgeCls={Nuevo:'nuevo','En proceso':'proceso',Resuelto:'resuelto',Rechazado:'rechazado'};
+const estados=['Nuevo','En proceso','Resuelto','Rechazado'];
+let filtrados=[];
+
+function filtrar(){
+  const t=document.getElementById('fil-tipo').value;
+  const e=document.getElementById('fil-estado').value;
+  // RF-005: filtros acumulativos (AND)
+  filtrados=data.filter(r=>(!t||r.tipo===t)&&(!e||r.estado===e));
+  paginaActual=1;
+  renderizar();
+}
+
+function resetFiltros(){
+  document.getElementById('fil-tipo').value='';
+  document.getElementById('fil-estado').value='';
+  filtrar();
+}
+
+function renderizar(){
+  const total=filtrados.length;
+  const totalPags=Math.ceil(total/POR_PAGINA)||1;
+  const inicio=(paginaActual-1)*POR_PAGINA;
+  const pagina=filtrados.slice(inicio,inicio+POR_PAGINA);
+
+  // Info paginación
+  document.getElementById('paginacion-info').innerHTML=
+    total?`Mostrando ${inicio+1}–${Math.min(inicio+POR_PAGINA,total)} de <strong>${total}</strong> radicados`
+    :'';
+
+  const c=document.getElementById('lista');
+  if(!pagina.length){
+    c.innerHTML='<div class="no-results">No se encontraron radicados con los filtros aplicados.</div>';
+    document.getElementById('paginacion-btns').innerHTML='';
+    return;
+  }
+
+  c.innerHTML=pagina.map((r,i)=>`
+    <div class="card" id="card-${inicio+i}">
+      <div class="card-top">
+        <h3>${r.id}</h3>
+        <span class="badge ${badgeCls[r.estado]}" id="badge-${inicio+i}">${r.estado}</span>
+      </div>
+      <div class="meta">
+        <span>📋 ${r.tipo}</span>
+        <span>👤 ${r.cliente}</span>
+        <span>📅 ${r.fecha}</span>
+      </div>
+      <div class="desc">${r.desc}</div>
+
+      <!-- RF-006: Botón descargar solo si hay anexo -->
+      ${r.anexo?`
+      <div class="anexo">
+        <span style="font-size:20px">📎</span>
+        <div><strong>${r.anexo}</strong><br><span style="color:#888;font-size:12px">Adjunto del cliente</span></div>
+        <button onclick="descargarAnexo('${r.anexo}','${r.id}')" style="margin-left:auto;font-size:12px">⬇ Descargar anexo</button>
+      </div>`:''}
+
+      <!-- RF-008: Cambiar estado con justificación obligatoria máx 500 chars -->
+      <div class="panel-estado">
+        <div class="row" style="margin-bottom:8px">
+          <div>
+            <label>Cambiar estado</label>
+            <select id="sel-${inicio+i}">
+              ${estados.map(e=>`<option${e===r.estado?' selected':''}>${e}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <label>Justificación * <span style="font-weight:normal;font-size:11px;color:#888">(obligatoria, máx. 500 caracteres)</span></label>
+        <textarea rows="3" id="just-${inicio+i}" maxlength="500"
+          placeholder="Escriba la justificación del cambio de estado…"
+          oninput="contarJust(${inicio+i})"></textarea>
+        <div class="char-count" id="cc-${inicio+i}">0 / 500</div>
+        <div class="field-error" id="err-just-${inicio+i}">La justificación es obligatoria.</div>
+        <div style="margin-top:8px">
+          <button class="success" onclick="guardarCambio(${inicio+i},'${r.id}')">✔ Guardar cambios</button>
+        </div>
+        <div class="alert-ok" id="ok-${inicio+i}">✔ Estado actualizado correctamente. El cliente puede ver el nuevo estado.</div>
+
+        <!-- Historial de cambios RF-008 RN-002 -->
+        <div class="historial">
+          <h4>Historial de cambios de estado</h4>
+          ${r.historial.map(h=>`
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-date">${h.fecha} — <strong>${h.user}</strong></div>
+                <div class="tl-text"><span class="badge ${badgeCls[h.estado]}" style="font-size:11px">${h.estado}</span> ${h.just}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Botones paginación
+  const pb=document.getElementById('paginacion-btns');
+  if(totalPags<=1){pb.innerHTML='';return;}
+  pb.innerHTML=`
+    <button onclick="irPagina(${paginaActual-1})" ${paginaActual===1?'disabled':''} class="secondary">← Anterior</button>
+    <span>Página ${paginaActual} de ${totalPags}</span>
+    <button onclick="irPagina(${paginaActual+1})" ${paginaActual===totalPags?'disabled':''} class="secondary">Siguiente →</button>`;
+}
+
+function irPagina(p){paginaActual=p;renderizar();}
+
+function contarJust(i){
+  const val=document.getElementById('just-'+i).value.length;
+  const el=document.getElementById('cc-'+i);
+  el.textContent=val+' / 500';
+  el.className='char-count'+(val>450?' warn':'')+(val>=500?' over':'');
+}
+
+function guardarCambio(i, radicadoId){
+  const just=document.getElementById('just-'+i).value.trim();
+  // RF-008 E1: justificación obligatoria
+  if(!just){
+    document.getElementById('err-just-'+i).style.display='block';
+    return;
+  }
+  document.getElementById('err-just-'+i).style.display='none';
+  const nuevoEstado=document.getElementById('sel-'+i).value;
+  const badge=document.getElementById('badge-'+i);
+  badge.textContent=nuevoEstado;
+  badge.className='badge '+badgeCls[nuevoEstado];
+  const ok=document.getElementById('ok-'+i);
+  ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',3500);
+}
+
+function descargarAnexo(nombre, radicadoId){
+  // RF-006: descarga registrada en log de auditoría (simulado)
+  alert('Descargando: '+nombre+'\n(Descarga registrada en log de auditoría para radicado '+radicadoId+')');
+}
+
+filtrar();
+</script>
+</body>
+</html>
